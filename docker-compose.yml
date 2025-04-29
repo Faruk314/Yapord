@@ -12,5 +12,18 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
 
+  redis:
+    image: redis:latest
+    container_name: yapord_redis_server
+    restart: always
+    ports:
+      - "6400:6379"
+    command: redis-server --requirepass ${REDIS_PASSWORD}
+    environment:
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+    volumes:
+      - redisdata:/data
+
 volumes:
   pgdata:
+  redisdata:
