@@ -28,8 +28,6 @@ export async function removeUserFromSession() {
 
   const sessionId = COOKIES.get(COOKIE_SESSION_KEY)?.value;
 
-  console.log(sessionId, "sesion id");
-
   if (sessionId == null) return null;
 
   await redisClient.del(`session:${sessionId}`);

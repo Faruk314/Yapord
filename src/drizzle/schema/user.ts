@@ -1,5 +1,7 @@
+import { relations } from "drizzle-orm";
 import { pgTable, text, pgEnum } from "drizzle-orm/pg-core";
 import { createdAt, id, updatedAt } from "../schemaHelpers";
+import { UserOAuthAccountTable } from "./userOAuth";
 
 export const userRoles = ["admin", "user"] as const;
 export type UserRole = (typeof userRoles)[number];
@@ -16,3 +18,7 @@ export const UserTable = pgTable("users", {
   createdAt,
   updatedAt,
 });
+
+export const userRelations = relations(UserTable, ({ many }) => ({
+  oAuthAccounts: many(UserOAuthAccountTable),
+}));
