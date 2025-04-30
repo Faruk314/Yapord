@@ -9,6 +9,8 @@ import { z } from "zod";
 import { Input } from "@/components/ui/input";
 import { PrimaryBtn } from "@/components/ui/PrimaryBtn";
 import Link from "next/link";
+import { DiscordBtn } from "@/components/ui/DiscordBtn";
+import { GitHubBtn } from "@/components/ui/GitHubBtn";
 
 export default function SignInForm() {
   const {
@@ -61,6 +63,12 @@ export default function SignInForm() {
           Sign In
         </PrimaryBtn>
 
+        <DiscordBtn />
+
+        <GitHubBtn />
+      </div>
+
+      <div className="w-full text-center">
         <Link href="/signUp">
           <PrimaryBtn className="w-full bg-blue-900 w-full hover:bg-blue-800">
             CREATE ACCOUNT

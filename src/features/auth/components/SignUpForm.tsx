@@ -8,6 +8,8 @@ import { z } from "zod";
 import { Input } from "@/components/ui/input";
 import { PrimaryBtn } from "@/components/ui/PrimaryBtn";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { DiscordBtn } from "@/components/ui/DiscordBtn";
+import { GitHubBtn } from "@/components/ui/GitHubBtn";
 
 export default function SignUpForm() {
   const {
@@ -65,9 +67,15 @@ export default function SignUpForm() {
         )}
       </div>
 
-      <PrimaryBtn type="submit" className="w-full">
-        Sign Up
-      </PrimaryBtn>
+      <div className="flex flex-col w-full space-y-2">
+        <PrimaryBtn type="submit" className="w-full">
+          Sign Up
+        </PrimaryBtn>
+
+        <DiscordBtn />
+
+        <GitHubBtn />
+      </div>
     </form>
   );
 }
