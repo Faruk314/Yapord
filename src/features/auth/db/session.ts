@@ -1,5 +1,3 @@
-"use server";
-
 import { sessionSchema } from "../schemas/session";
 import { z } from "zod";
 import crypto from "crypto";

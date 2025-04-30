@@ -49,7 +49,7 @@ async function signIn(unsafeData: z.infer<typeof signInSchema>) {
     where: eq(UserTable.email, data.email),
   });
 
-  if (user == null) {
+  if (user == null || user.password == null || user.salt == null) {
     return "Unable to log you in";
   }
 
