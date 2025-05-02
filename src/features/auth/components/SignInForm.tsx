@@ -68,11 +68,15 @@ export default function SignInForm() {
         <GitHubBtn />
       </div>
 
+      <div className="grid grid-cols-[1fr_auto_1fr] gap-3 items-center w-full">
+        <hr className="border-gray-400" />
+        <span>OR</span>
+        <hr className="border-gray-400" />
+      </div>
+
       <div className="w-full text-center">
         <Link href="/signUp">
-          <PrimaryBtn className="w-full bg-blue-900 w-full hover:bg-blue-800">
-            CREATE ACCOUNT
-          </PrimaryBtn>
+          <PrimaryBtn className="w-full">CREATE ACCOUNT</PrimaryBtn>
         </Link>
       </div>
     </form>
