@@ -2,6 +2,8 @@ import { relations } from "drizzle-orm";
 import { pgTable, text, pgEnum } from "drizzle-orm/pg-core";
 import { createdAt, id, updatedAt } from "../schemaHelpers";
 import { UserOAuthAccountTable } from "./userOAuth";
+import { ServerTable } from "./server";
+import { ServerMemberTable } from "./serverMember";
 
 export const userRoles = ["admin", "user"] as const;
 export type UserRole = (typeof userRoles)[number];
@@ -21,4 +23,6 @@ export const UserTable = pgTable("users", {
 
 export const userRelations = relations(UserTable, ({ many }) => ({
   oAuthAccounts: many(UserOAuthAccountTable),
+  ownedServers: many(ServerTable),
+  serverMemberships: many(ServerMemberTable),
 }));
