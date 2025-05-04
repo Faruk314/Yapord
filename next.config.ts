@@ -5,6 +5,20 @@ const nextConfig: NextConfig = {
     authInterrupts: true,
     nodeMiddleware: true,
     useCache: true,
+    serverActions: {
+      bodySizeLimit: "10mb",
+    },
+  },
+
+  images: {
+    remotePatterns: [
+      {
+        protocol: "http",
+        hostname: "localhost",
+        port: "9000",
+        pathname: "/yapord/**",
+      },
+    ],
   },
 };
 
