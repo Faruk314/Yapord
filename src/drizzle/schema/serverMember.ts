@@ -4,7 +4,7 @@ import { ServerTable } from "./server";
 import { UserTable } from "./user";
 import { createdAt, updatedAt } from "../schemaHelpers";
 
-export const serverRoles = ["admin", "member"] as const;
+export const serverRoles = ["owner", "admin", "member"] as const;
 export type ServerRole = (typeof serverRoles)[number];
 export const serverRoleEnum = pgEnum("server_roles", serverRoles);
 

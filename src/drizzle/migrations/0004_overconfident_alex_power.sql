@@ -1,0 +1,1 @@
+ALTER TYPE "public"."server_roles" ADD VALUE 'owner' BEFORE 'admin';
