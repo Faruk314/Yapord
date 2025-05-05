@@ -11,6 +11,7 @@ interface ImageUploaderProps {
   multiple?: boolean;
   maxFiles?: number;
   className?: string;
+  existingImage?: string;
 }
 
 const ImageUploader: React.FC<ImageUploaderProps> = ({
@@ -18,8 +19,9 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
   multiple = false,
   maxFiles = 1,
   className = "",
+  existingImage,
 }) => {
-  const [preview, setPreview] = useState<string | null>(null);
+  const [preview, setPreview] = useState<string | undefined>(existingImage);
 
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
