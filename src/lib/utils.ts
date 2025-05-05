@@ -2,7 +2,7 @@ import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { v4 as uuidv4 } from "uuid";
 
-export function cn(...inputs: ClassValue[]) {
+function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
@@ -15,4 +15,8 @@ function createUniqueFileNames(images: File[]) {
   return fileNames;
 }
 
-export { createUniqueFileNames };
+function createMinioImageUrl(imageSrc: string) {
+  return `${process.env.NEXT_PUBLIC_MINIO_CLIENT_URL}/${imageSrc}`;
+}
+
+export { cn, createUniqueFileNames, createMinioImageUrl };
