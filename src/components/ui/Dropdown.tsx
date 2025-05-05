@@ -11,7 +11,7 @@ interface DropdownProps {
 }
 
 export function Dropdown({ label, children, className }: DropdownProps) {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
 
   const handleToggle = () => {
     setIsOpen((prev) => !prev);
