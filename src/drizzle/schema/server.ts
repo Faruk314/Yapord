@@ -3,6 +3,7 @@ import { pgTable, text, uuid } from "drizzle-orm/pg-core";
 import { UserTable } from "./user";
 import { id, createdAt, updatedAt } from "../schemaHelpers";
 import { ServerMemberTable } from "./serverMember";
+import { ChannelTable } from "./channels";
 
 export const ServerTable = pgTable("servers", {
   id,
@@ -21,4 +22,5 @@ export const serverRelations = relations(ServerTable, ({ one, many }) => ({
     references: [UserTable.id],
   }),
   members: many(ServerMemberTable),
+  channels: many(ChannelTable),
 }));
