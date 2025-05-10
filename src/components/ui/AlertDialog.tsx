@@ -7,26 +7,27 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { ReactNode, useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 
 interface AlertDialogBoxProps {
-  trigger: ReactNode;
   title: string;
   description: string;
   onConfirm: () => void | Promise<void>;
   cancelText?: string;
   confirmText?: string;
+  isOpen: boolean;
+  setIsOpen: Dispatch<SetStateAction<boolean>>;
 }
 
 export function AlertDialogBox({
-  trigger,
   title,
   description,
   onConfirm,
   cancelText = "Cancel",
   confirmText = "Continue",
+  isOpen,
+  setIsOpen,
 }: AlertDialogBoxProps) {
   const [loading, setLoading] = useState(false);
 
@@ -34,14 +35,15 @@ export function AlertDialogBox({
     try {
       setLoading(true);
       await onConfirm();
+
+      setIsOpen(false);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <AlertDialog>
-      <AlertDialogTrigger asChild>{trigger}</AlertDialogTrigger>
+    <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>{title}</AlertDialogTitle>

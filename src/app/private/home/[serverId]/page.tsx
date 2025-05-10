@@ -2,11 +2,11 @@ import React from "react";
 import { HiMiniHashtag, HiOutlineSpeakerWave } from "react-icons/hi2";
 import { Dropdown } from "@/components/ui/Dropdown";
 import { getServer } from "@/features/servers/db/servers";
-import { DropdownWrapper } from "@/components/ui/DropdownWrapper";
 import { ServerDropdownMenu } from "@/features/servers/components/ServerDropdownMenu";
 import { getCurrentUser } from "@/features/auth/actions/user";
 import { redirect } from "next/navigation";
 import { getCurrentServerMember } from "@/features/servers/actions/serverMembers";
+import CreateChannel from "@/features/channels/components/modals/CreateChannel";
 
 export default async function ServerPage({
   params,
@@ -28,16 +28,15 @@ export default async function ServerPage({
       <div className="border-r-2 border-gray-300 overflow-y-auto h-[100vh]">
         <div className="flex items-center justify-between lg:w-[20rem] py-4 px-4 border-b-2 border-gray-300">
           <span className="text-xl font-semibold">{server?.name}</span>
-          <DropdownWrapper>
-            <ServerDropdownMenu
-              serverMemberRole={serverMember?.role}
-              ownerId={user.id}
-              server={server}
-            />
-          </DropdownWrapper>
+
+          <ServerDropdownMenu
+            serverMemberRole={serverMember?.role}
+            ownerId={user.id}
+            server={server}
+          />
         </div>
 
-        <div className="p-4">
+        <div className="p-4 flex items-start">
           <Dropdown label="Text channel">
             <div className="pt-4">
               <div className="flex flex-col space-y-1">
@@ -53,9 +52,11 @@ export default async function ServerPage({
               </div>
             </div>
           </Dropdown>
+
+          <CreateChannel serverId={serverId} channelType="text" />
         </div>
 
-        <div className="px-4 pb-4">
+        <div className="px-4 pb-4 flex items-start">
           <Dropdown label="Voice channel">
             <div className="flex flex-col space-y-1 pt-4">
               {[0, 1].map((voiceChannel) => (
@@ -69,6 +70,8 @@ export default async function ServerPage({
               ))}
             </div>
           </Dropdown>
+
+          <CreateChannel serverId={serverId} channelType="voice" />
         </div>
       </div>
     </>

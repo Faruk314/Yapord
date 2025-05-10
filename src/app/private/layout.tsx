@@ -1,11 +1,8 @@
-import { IconBtn } from "@/components/ui/IconBtn";
-import { ModalWrapper } from "@/components/ui/ModalWrapper";
 import { getCurrentUser } from "@/features/auth/actions/user";
-import ServerForm from "@/features/servers/components/ServerForm";
 import ServerList from "@/features/servers/components/ServerList";
+import CreateServer from "@/features/servers/components/modals/CreateServer";
 import Link from "next/link";
 import { FaDiscord } from "react-icons/fa";
-import { PiPlusCircleBold } from "react-icons/pi";
 
 export default async function HomeLayout({
   children,
@@ -34,9 +31,7 @@ export async function SideBar() {
 
       <ServerList userId={user.id} />
 
-      <ModalWrapper trigger={<IconBtn icon={<PiPlusCircleBold />} />}>
-        <ServerForm ownerId={user.id} />
-      </ModalWrapper>
+      <CreateServer userId={user.id} />
     </div>
   );
 }

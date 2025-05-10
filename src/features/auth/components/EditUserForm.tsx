@@ -1,12 +1,5 @@
 "use client";
 
-import {
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { PrimaryBtn } from "@/components/ui/PrimaryBtn";
@@ -52,41 +45,31 @@ export default function EditUserForm({ user, userId }: Props) {
   }
 
   return (
-    <DialogContent className="sm:max-w-[425px]">
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <DialogHeader>
-          <DialogTitle>Edit profile</DialogTitle>
-          <DialogDescription>
-            Make changes to your profile here. Click save when youre done.
-          </DialogDescription>
-        </DialogHeader>
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <div className="flex items-center justify-center my-10">
+        <ImageUploader
+          onFileUpload={onFileUpload}
+          existingImage={existingImage}
+        />
+      </div>
 
-        <div className="flex items-center justify-center my-10">
-          <ImageUploader
-            onFileUpload={onFileUpload}
-            existingImage={existingImage}
+      <div className="grid gap-4 py-4">
+        <div className="grid grid-cols-4 items-center gap-4">
+          <Label htmlFor="name" className="text-right">
+            Name
+          </Label>
+          <Input
+            placeholder="Name"
+            className="col-span-3"
+            {...register("name", { required: "Name is required" })}
           />
         </div>
+        {errors.name && (
+          <p className="text-red-500 text-sm">{errors.name.message}</p>
+        )}
+      </div>
 
-        <div className="grid gap-4 py-4">
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="name" className="text-right">
-              Name
-            </Label>
-            <Input
-              placeholder="Name"
-              className="col-span-3"
-              {...register("name", { required: "Name is required" })}
-            />
-          </div>
-          {errors.name && (
-            <p className="text-red-500 text-sm">{errors.name.message}</p>
-          )}
-        </div>
-        <DialogFooter>
-          <PrimaryBtn type="submit">Save changes</PrimaryBtn>
-        </DialogFooter>
-      </form>
-    </DialogContent>
+      <PrimaryBtn type="submit">Save changes</PrimaryBtn>
+    </form>
   );
 }

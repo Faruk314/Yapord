@@ -1,27 +1,14 @@
-import EditUserForm from "@/features/auth/components/EditUserForm";
 import Avatar from "@/components/ui/Avatar";
-import { IconBtn } from "@/components/ui/IconBtn";
-import { ModalWrapper } from "@/components/ui/ModalWrapper";
-import { BiEdit } from "react-icons/bi";
 import { getCurrentUser } from "@/features/auth/actions/user";
-import { z } from "zod";
-import { userSchema } from "@/features/auth/schemas/user";
+import EditUser from "@/features/auth/components/modals/EditUser";
 
 export default async function HomePage() {
-  const user = await getCurrentUser({
-    redirectIfNotFound: true,
-    withFullUser: true,
-  });
-
   const directMessages: string[] = [];
 
   return (
     <>
       <div className="border-r-2 border-gray-300 overflow-y-auto h-[100vh]">
-        <HomeHeader
-          userId={user.id}
-          user={{ name: user.name, image: user.image }}
-        />
+        <HomeHeader />
         <div className="p-4">
           <span className="font-semibold">Direct Messages</span>
 
@@ -49,22 +36,17 @@ export default async function HomePage() {
   );
 }
 
-export function HomeHeader({
-  user,
-  userId,
-}: {
-  user: z.infer<typeof userSchema>;
-  userId: string;
-}) {
+export async function HomeHeader() {
+  const user = await getCurrentUser({
+    redirectIfNotFound: true,
+    withFullUser: true,
+  });
+
   return (
     <div className="flex items-center justify-between lg:w-[20rem] py-4 px-4 border-b-2 border-gray-300">
       <span className="text-xl font-semibold">Faruk Spahic</span>
 
-      <ModalWrapper
-        trigger={<IconBtn className="h-10 w-10" icon={<BiEdit />} />}
-      >
-        <EditUserForm user={user} userId={userId} />
-      </ModalWrapper>
+      <EditUser user={user} userId={user.id} />
     </div>
   );
 }

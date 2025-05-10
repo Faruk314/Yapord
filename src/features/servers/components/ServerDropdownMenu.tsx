@@ -3,16 +3,21 @@
 import {
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenu,
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { FaUsers, FaTrash, FaEdit } from "react-icons/fa";
-import ServerForm from "./ServerForm";
+import { FaEdit, FaTrash, FaUsers } from "react-icons/fa";
 import { Server } from "../types/servers";
-import { ModalWrapper } from "@/components/ui/ModalWrapper";
 import { AlertDialogBox } from "@/components/ui/AlertDialog";
 import { deleteServer } from "../actions/servers";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { ServerRole } from "@/drizzle/schema";
+import { useState } from "react";
+import { MdOutlineKeyboardArrowDown } from "react-icons/md";
+import { HiX } from "react-icons/hi";
+import ServerForm from "./ServerForm";
+import DialogWrapper from "@/components/DialogWrapper";
 import ServerMembers from "./ServerMembers";
 
 interface Props {
@@ -27,6 +32,14 @@ export function ServerDropdownMenu({
   serverMemberRole,
 }: Props) {
   const router = useRouter();
+  const [isOpen, setIsOpen] = useState(false);
+  const [isEditOpen, setIsEditOpen] = useState(false);
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  const [isMembersOpen, setIsMembersOpen] = useState(false);
+
+  const isModerator =
+    serverMemberRole === "owner" || serverMemberRole === "admin";
+  const isOwner = serverMemberRole === "owner";
 
   async function handleDeleteServer() {
     const data = await deleteServer(server.id);
@@ -42,48 +55,70 @@ export function ServerDropdownMenu({
   }
 
   return (
-    <DropdownMenuContent align="end" className="w-56">
-      {serverMemberRole !== "member" && (
-        <ModalWrapper
-          trigger={
-            <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+    <>
+      <DialogWrapper
+        isOpen={isEditOpen}
+        setIsOpen={setIsEditOpen}
+        title="Edit Profile"
+        description="Update your server’s name or settings. Changes will be saved immediately."
+      >
+        <ServerForm
+          userId={ownerId}
+          server={server}
+          setIsOpen={setIsEditOpen}
+        />
+      </DialogWrapper>
+
+      <DialogWrapper
+        isOpen={isMembersOpen}
+        setIsOpen={setIsMembersOpen}
+        title="Server members"
+      >
+        <ServerMembers />
+      </DialogWrapper>
+
+      <AlertDialogBox
+        title="Are you absolutely sure?"
+        description="This action cannot be undone. This will permanently delete this server."
+        onConfirm={handleDeleteServer}
+        isOpen={isDeleteOpen}
+        setIsOpen={setIsDeleteOpen}
+        confirmText="Delete"
+      />
+
+      <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
+        <DropdownMenuTrigger asChild>
+          {!isOpen ? (
+            <MdOutlineKeyboardArrowDown className="text-2xl cursor-pointer" />
+          ) : (
+            <HiX className="text-2xl cursor-pointer" />
+          )}
+        </DropdownMenuTrigger>
+
+        <DropdownMenuContent>
+          {isModerator && (
+            <DropdownMenuItem onClick={() => setIsEditOpen(true)}>
               <FaEdit className="mr-2 h-4 w-4 text-muted-foreground" />
               Edit server
             </DropdownMenuItem>
-          }
-        >
-          <ServerForm ownerId={ownerId} server={server} />
-        </ModalWrapper>
-      )}
+          )}
 
-      <ModalWrapper
-        trigger={
-          <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+          <DropdownMenuItem onClick={() => setIsMembersOpen(true)}>
             <FaUsers className="mr-2 h-4 w-4 text-muted-foreground" />
             Members
           </DropdownMenuItem>
-        }
-      >
-        <ServerMembers />
-      </ModalWrapper>
 
-      {serverMemberRole === "owner" && (
-        <AlertDialogBox
-          trigger={
+          {isOwner && (
             <DropdownMenuItem
-              onSelect={(e) => e.preventDefault()}
+              onClick={() => setIsDeleteOpen(true)}
               className="text-red-600 hover:text-red-700"
             >
               <FaTrash className="mr-2 h-4 w-4 text-red-500" />
               Delete Server
             </DropdownMenuItem>
-          }
-          title="Are you absolutely sure?"
-          description="This action cannot be undone. This will permanently delete this server."
-          onConfirm={handleDeleteServer}
-          confirmText="Delete"
-        />
-      )}
-    </DropdownMenuContent>
+          )}
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </>
   );
 }
