@@ -59,7 +59,7 @@ export function ServerDropdownMenu({
       <DialogWrapper
         isOpen={isEditOpen}
         setIsOpen={setIsEditOpen}
-        title="Edit Profile"
+        title="Edit Server"
         description="Update your server’s name or settings. Changes will be saved immediately."
       >
         <ServerForm
