@@ -5,7 +5,7 @@ import {
 } from "./features/auth/db/session";
 
 const authPages = ["/signIn", "/signUp"];
-const privateRoutes = ["/home"];
+const privateRoutes = ["/home", "/server"];
 const adminRoutes = ["/admin"];
 
 export async function middleware(request: NextRequest) {
