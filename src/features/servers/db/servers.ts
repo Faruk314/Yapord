@@ -3,16 +3,22 @@
 import { ServerTable } from "@/drizzle/schema";
 import { db } from "@/drizzle/db";
 import { cacheTag } from "next/dist/server/use-cache/cache-tag";
-import { getServerGlobalTag, revalidateServerCache } from "../cache/servers";
+import {
+  getServerGlobalTag,
+  getServerIdTag,
+  revalidateServerCache,
+} from "../cache/servers";
 import { eq } from "drizzle-orm";
 import { Server } from "../types/servers";
+import {
+  getChannelGlobalTag,
+  getChannelServerTag,
+} from "@/features/channels/cache/channels";
 
 async function getServers(userId: string) {
   "use cache";
 
-  //   cacheTag(getServerGlobalTag(), getServerSectionGlobalTag());
-
-  cacheTag(getServerGlobalTag());
+  cacheTag(getServerGlobalTag(), getChannelGlobalTag());
 
   const data = await db
     .select({
@@ -29,7 +35,7 @@ async function getServers(userId: string) {
 async function getServer(id: string) {
   "use cache";
 
-  //   cacheTag(getServerIdTag(id), getServerSectionServerTag(id));
+  cacheTag(getServerIdTag(id), getChannelServerTag(id));
 
   const server = await db.query.ServerTable.findFirst({
     columns: {
@@ -39,11 +45,11 @@ async function getServer(id: string) {
       ownerId: true,
     },
     where: eq(ServerTable.id, id),
-    // with: {
-    //   sections: {
-    //     columns: { id: true, subtitle: true, text: true },
-    //   },
-    // },
+    with: {
+      channels: {
+        columns: { id: true, name: true, type: true },
+      },
+    },
   });
 
   return server;
