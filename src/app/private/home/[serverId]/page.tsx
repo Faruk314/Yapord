@@ -40,15 +40,17 @@ export default async function ServerPage({
           <Dropdown label="Text channel">
             <div className="pt-4">
               <div className="flex flex-col space-y-1">
-                {[0, 1].map((textChannel) => (
-                  <div
-                    key={textChannel}
-                    className="flex space-x-2 items-center text-gray-500 py-1 hover:bg-gray-100 hover:rounded-md cursor-pointer"
-                  >
-                    <HiMiniHashtag />
-                    <span>Text room</span>
-                  </div>
-                ))}
+                {server.channels
+                  .filter((c) => c.type === "text")
+                  .map((channel) => (
+                    <div
+                      key={channel.id}
+                      className="flex space-x-2 items-center text-gray-500 py-1 hover:bg-gray-100 hover:rounded-md cursor-pointer"
+                    >
+                      <HiMiniHashtag />
+                      <span>Text room</span>
+                    </div>
+                  ))}
               </div>
             </div>
           </Dropdown>
@@ -59,15 +61,17 @@ export default async function ServerPage({
         <div className="px-4 pb-4 flex items-start">
           <Dropdown label="Voice channel">
             <div className="flex flex-col space-y-1 pt-4">
-              {[0, 1].map((voiceChannel) => (
-                <div
-                  key={voiceChannel}
-                  className="flex space-x-2 items-center text-gray-500 py-1 hover:bg-gray-100 hover:rounded-md cursor-pointer"
-                >
-                  <HiOutlineSpeakerWave />
-                  <span>Voice Room</span>
-                </div>
-              ))}
+              {server.channels
+                .filter((c) => c.type === "voice")
+                .map((channel) => (
+                  <div
+                    key={channel.id}
+                    className="flex space-x-2 items-center text-gray-500 py-1 hover:bg-gray-100 hover:rounded-md cursor-pointer"
+                  >
+                    <HiOutlineSpeakerWave />
+                    <span>{channel.name}</span>
+                  </div>
+                ))}
             </div>
           </Dropdown>
 
