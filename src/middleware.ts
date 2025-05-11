@@ -4,7 +4,8 @@ import {
   getUserFromSession,
 } from "./features/auth/db/session";
 
-const privateRoutes = ["/private"];
+const authPages = ["/signIn", "/signUp"];
+const privateRoutes = ["/home"];
 const adminRoutes = ["/admin"];
 
 export async function middleware(request: NextRequest) {
@@ -16,11 +17,17 @@ export async function middleware(request: NextRequest) {
 }
 
 async function middlewareAuth(request: NextRequest) {
-  if (privateRoutes.includes(request.nextUrl.pathname)) {
-    const user = await getUserFromSession();
+  const user = await getUserFromSession();
 
+  if (authPages.includes(request.nextUrl.pathname)) {
+    if (user != null) {
+      return NextResponse.redirect(new URL("/", request.url));
+    }
+  }
+
+  if (privateRoutes.includes(request.nextUrl.pathname)) {
     if (user == null) {
-      return NextResponse.redirect(new URL("/sign-in", request.url));
+      return NextResponse.redirect(new URL("/signIn", request.url));
     }
   }
 
