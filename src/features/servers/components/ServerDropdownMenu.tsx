@@ -5,6 +5,7 @@ import {
   DropdownMenuItem,
   DropdownMenu,
   DropdownMenuTrigger,
+  DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { FaEdit, FaTrash, FaUsers } from "react-icons/fa";
 import { Server } from "../types/servers";
@@ -89,31 +90,39 @@ export function ServerDropdownMenu({
       <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
         <DropdownMenuTrigger asChild>
           {!isOpen ? (
-            <MdOutlineKeyboardArrowDown className="text-2xl cursor-pointer" />
+            <MdOutlineKeyboardArrowDown className="text-3xl cursor-pointer" />
           ) : (
             <HiX className="text-2xl cursor-pointer" />
           )}
         </DropdownMenuTrigger>
 
-        <DropdownMenuContent>
+        <DropdownMenuContent align="end" className="text-lg p-2">
           {isModerator && (
-            <DropdownMenuItem onClick={() => setIsEditOpen(true)}>
-              <FaEdit className="mr-2 h-4 w-4 text-muted-foreground" />
+            <DropdownMenuItem
+              onClick={() => setIsEditOpen(true)}
+              className="text-[1rem] py-2 pr-10"
+            >
+              <FaEdit className="text-muted-foreground" />
               Edit server
             </DropdownMenuItem>
           )}
 
-          <DropdownMenuItem onClick={() => setIsMembersOpen(true)}>
-            <FaUsers className="mr-2 h-4 w-4 text-muted-foreground" />
+          <DropdownMenuItem
+            onClick={() => setIsMembersOpen(true)}
+            className="text-[1rem] py-2 pr-12"
+          >
+            <FaUsers className="text-muted-foreground" />
             Members
           </DropdownMenuItem>
+
+          <DropdownMenuSeparator className="mx-2" />
 
           {isOwner && (
             <DropdownMenuItem
               onClick={() => setIsDeleteOpen(true)}
-              className="text-red-600 hover:text-red-700"
+              className="text-[1rem] py-2 text-red-600 hover:text-red-700 pr-20"
             >
-              <FaTrash className="mr-2 h-4 w-4 text-red-500" />
+              <FaTrash className="text-red-500" />
               Delete Server
             </DropdownMenuItem>
           )}
