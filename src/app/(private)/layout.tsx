@@ -4,7 +4,7 @@ import CreateServer from "@/features/servers/components/modals/CreateServer";
 import Link from "next/link";
 import { FaDiscord } from "react-icons/fa";
 
-export default async function HomeLayout({
+export default async function layout({
   children,
 }: {
   children: React.ReactNode;
@@ -23,7 +23,7 @@ export async function SideBar() {
   return (
     <div className="flex flex-col space-y-2 p-4 border-r-2 border-gray-300">
       <Link
-        href={`/private/home/`}
+        href={`/home/`}
         className="cursor-pointer flex items-center justify-center relative w-12 h-12 rounded-full overflow-hidden bg-blue-600 text-white font-black uppercase"
       >
         <FaDiscord size={26} />

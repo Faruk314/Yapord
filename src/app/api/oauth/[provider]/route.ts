@@ -42,5 +42,5 @@ export async function GET(
     );
   }
 
-  redirect("/private/home");
+  redirect("/home");
 }

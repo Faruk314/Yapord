@@ -1,14 +1,24 @@
 import Avatar from "@/components/ui/Avatar";
 import { getCurrentUser } from "@/features/auth/actions/user";
 import EditUser from "@/features/auth/components/modals/EditUser";
+import { userSchema } from "@/features/auth/schemas/user";
+import { z } from "zod";
 
 export default async function HomePage() {
+  const user = await getCurrentUser({
+    redirectIfNotFound: true,
+    withFullUser: true,
+  });
+
   const directMessages: string[] = [];
 
   return (
     <>
       <div className="border-r-2 border-gray-300 overflow-y-auto h-[100vh]">
-        <HomeHeader />
+        <HomeHeader
+          userId={user.id}
+          user={{ name: user.name, image: user.image }}
+        />
         <div className="p-4">
           <span className="font-semibold">Direct Messages</span>
 
@@ -36,17 +46,18 @@ export default async function HomePage() {
   );
 }
 
-export async function HomeHeader() {
-  const user = await getCurrentUser({
-    redirectIfNotFound: true,
-    withFullUser: true,
-  });
-
+export async function HomeHeader({
+  userId,
+  user,
+}: {
+  userId: string;
+  user: z.infer<typeof userSchema>;
+}) {
   return (
     <div className="flex items-center justify-between lg:w-[20rem] py-4 px-4 border-b-2 border-gray-300">
       <span className="text-xl font-semibold">Faruk Spahic</span>
 
-      <EditUser user={user} userId={user.id} />
+      <EditUser user={user} userId={userId} />
     </div>
   );
 }

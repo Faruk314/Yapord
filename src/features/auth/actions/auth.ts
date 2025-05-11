@@ -29,7 +29,7 @@ async function signUp(unsafeData: z.infer<typeof signUpSchema>) {
     return "Unable to create account";
   }
 
-  redirect("/private/home");
+  redirect("/home");
 }
 
 async function signIn(unsafeData: z.infer<typeof signInSchema>) {
@@ -63,7 +63,7 @@ async function signIn(unsafeData: z.infer<typeof signInSchema>) {
 
   await createUserSession(user);
 
-  redirect("/private/home");
+  redirect("/home");
 }
 
 async function logOut() {

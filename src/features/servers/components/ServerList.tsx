@@ -11,7 +11,7 @@ export default async function ServerList({ userId }: { userId: string }) {
       {servers.map((server) => (
         <Link
           key={server.id}
-          href={`/private/home/${server.id}`}
+          href={`/server/${server.id}`}
           className="cursor-pointer"
         >
           <Avatar

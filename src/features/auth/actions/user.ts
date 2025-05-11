@@ -42,7 +42,7 @@ async function _getCurrentUser({
   const user = await getUserFromSession();
 
   if (user == null) {
-    if (redirectIfNotFound) return redirect("/admin/signIn");
+    if (redirectIfNotFound) return redirect("/signIn");
 
     return null;
   }

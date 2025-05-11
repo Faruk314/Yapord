@@ -7,11 +7,14 @@ import { getCurrentUser } from "@/features/auth/actions/user";
 import { redirect } from "next/navigation";
 import { getCurrentServerMember } from "@/features/servers/actions/serverMembers";
 import CreateChannel from "@/features/channels/components/modals/CreateChannel";
+import Link from "next/link";
 
-export default async function ServerPage({
+export default async function ServerLayout({
   params,
+  children,
 }: {
   params: Promise<{ serverId: string }>;
+  children: React.ReactNode;
 }) {
   const user = await getCurrentUser({ redirectIfNotFound: true });
 
@@ -21,7 +24,7 @@ export default async function ServerPage({
 
   const serverMember = await getCurrentServerMember();
 
-  if (!server || !serverMember) redirect("/private/home");
+  if (!server || !serverMember) redirect("/home");
 
   return (
     <>
@@ -43,13 +46,14 @@ export default async function ServerPage({
                 {server.channels
                   .filter((c) => c.type === "text")
                   .map((channel) => (
-                    <div
+                    <Link
+                      href={`/server/${server.id}/${channel.id}`}
                       key={channel.id}
                       className="flex space-x-2 items-center text-gray-500 py-1 hover:bg-gray-100 hover:rounded-md cursor-pointer"
                     >
                       <HiMiniHashtag />
-                      <span>Text room</span>
-                    </div>
+                      <span>{channel.name}</span>
+                    </Link>
                   ))}
               </div>
             </div>
@@ -64,13 +68,14 @@ export default async function ServerPage({
               {server.channels
                 .filter((c) => c.type === "voice")
                 .map((channel) => (
-                  <div
+                  <Link
+                    href={`/server/${server.id}/${channel.id}`}
                     key={channel.id}
                     className="flex space-x-2 items-center text-gray-500 py-1 hover:bg-gray-100 hover:rounded-md cursor-pointer"
                   >
                     <HiOutlineSpeakerWave />
                     <span>{channel.name}</span>
-                  </div>
+                  </Link>
                 ))}
             </div>
           </Dropdown>
@@ -78,6 +83,8 @@ export default async function ServerPage({
           <CreateChannel serverId={serverId} channelType="voice" />
         </div>
       </div>
+
+      {children}
     </>
   );
 }

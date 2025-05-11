@@ -52,7 +52,7 @@ export function ServerDropdownMenu({
 
     toast.success(data.message);
 
-    router.push("/private/home");
+    router.push("/home");
   }
 
   return (
