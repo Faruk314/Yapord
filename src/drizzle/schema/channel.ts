@@ -2,6 +2,7 @@ import { pgEnum, pgTable, text, uuid } from "drizzle-orm/pg-core";
 import { id, createdAt, updatedAt } from "../schemaHelpers";
 import { ServerTable } from "./server";
 import { relations } from "drizzle-orm";
+import { ChannelMessageTable } from "./channelMessage";
 
 export const channelTypes = ["voice", "text"] as const;
 export type ChannelType = (typeof channelTypes)[number];
@@ -18,9 +19,10 @@ export const ChannelTable = pgTable("channels", {
   updatedAt,
 });
 
-export const channelRelations = relations(ChannelTable, ({ one }) => ({
+export const channelRelations = relations(ChannelTable, ({ one, many }) => ({
   server: one(ServerTable, {
     fields: [ChannelTable.serverId],
     references: [ServerTable.id],
   }),
+  messages: many(ChannelMessageTable),
 }));

@@ -43,6 +43,13 @@
       "when": 1746811315684,
       "tag": "0005_pretty_bruce_banner",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1747059555092,
+      "tag": "0006_freezing_karma",
+      "breakpoints": true
     }
   ]
 }

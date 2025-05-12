@@ -3,7 +3,7 @@ import { pgTable, text, uuid } from "drizzle-orm/pg-core";
 import { UserTable } from "./user";
 import { id, createdAt, updatedAt } from "../schemaHelpers";
 import { ServerMemberTable } from "./serverMember";
-import { ChannelTable } from "./channels";
+import { ChannelTable } from "./channel";
 
 export const ServerTable = pgTable("servers", {
   id,
