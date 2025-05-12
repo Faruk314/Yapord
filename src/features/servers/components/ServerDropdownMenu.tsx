@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { FaEdit, FaTrash, FaUsers } from "react-icons/fa";
 import { Server } from "../types/servers";
-import { AlertDialogBox } from "@/components/ui/AlertDialog";
+import { AlertDialogBox } from "@/components/modals/AlertDialog";
 import { deleteServer } from "../actions/servers";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
@@ -18,7 +18,7 @@ import { useState } from "react";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import { HiX } from "react-icons/hi";
 import ServerForm from "./ServerForm";
-import DialogWrapper from "@/components/DialogWrapper";
+import DialogWrapper from "@/components/modals/DialogWrapper";
 import ServerMembers from "./ServerMembers";
 
 interface Props {

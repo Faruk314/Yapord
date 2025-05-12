@@ -1,8 +1,8 @@
 "use client";
 
-import { ChatInput } from "@/components/ChatInput";
-import { Message } from "@/components/Message";
-import { IconBtn } from "@/components/ui/IconBtn";
+import { ChatInput } from "@/components/inputs/ChatInput";
+import { Message } from "@/components/chat/Message";
+import { IconBtn } from "@/components/buttons/IconBtn";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Upload } from "lucide-react";
 import React, { useState } from "react";

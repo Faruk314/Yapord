@@ -1,6 +1,6 @@
 "use client";
 
-import { PrimaryBtn } from "@/components/ui/PrimaryBtn";
+import { PrimaryBtn } from "@/components/buttons/PrimaryBtn";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { Dispatch, SetStateAction } from "react";
 import { useForm } from "react-hook-form";

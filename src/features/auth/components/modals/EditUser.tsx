@@ -1,7 +1,7 @@
 "use client";
 
-import DialogWrapper from "@/components/DialogWrapper";
-import { IconBtn } from "@/components/ui/IconBtn";
+import DialogWrapper from "@/components/modals/DialogWrapper";
+import { IconBtn } from "@/components/buttons/IconBtn";
 import React, { useState } from "react";
 import { BiEdit } from "react-icons/bi";
 import EditUserForm from "../EditUserForm";

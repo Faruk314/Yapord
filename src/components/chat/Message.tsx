@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import Avatar from "./ui/Avatar";
+import Avatar from "../ui/Avatar";
 import { formatMessageTime } from "@/lib/utils";
 
 interface Props {

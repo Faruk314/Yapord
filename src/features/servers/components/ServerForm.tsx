@@ -2,8 +2,8 @@
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { PrimaryBtn } from "../../../components/ui/PrimaryBtn";
-import ImageUploader from "../../../components/ui/ImageUploader";
+import { PrimaryBtn } from "../../../components/buttons/PrimaryBtn";
+import ImageUploader from "../../../components/uploaders/ImageUploader";
 import { useForm } from "react-hook-form";
 import { serverSchema } from "@/features/servers/schemas/servers";
 import { z } from "zod";

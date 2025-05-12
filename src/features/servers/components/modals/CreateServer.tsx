@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
-import DialogWrapper from "@/components/DialogWrapper";
+import DialogWrapper from "@/components/modals/DialogWrapper";
 import ServerForm from "../ServerForm";
-import { IconBtn } from "@/components/ui/IconBtn";
+import { IconBtn } from "@/components/buttons/IconBtn";
 import { PiPlusCircleBold } from "react-icons/pi";
 
 interface Props {

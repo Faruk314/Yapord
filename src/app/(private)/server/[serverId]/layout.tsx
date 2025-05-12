@@ -1,6 +1,6 @@
 import React from "react";
 import { HiMiniHashtag, HiOutlineSpeakerWave } from "react-icons/hi2";
-import { Dropdown } from "@/components/ui/Dropdown";
+import { Dropdown } from "@/components/dropdowns/Dropdown";
 import { getServer } from "@/features/servers/db/servers";
 import { ServerDropdownMenu } from "@/features/servers/components/ServerDropdownMenu";
 import { getCurrentUser } from "@/features/auth/actions/user";

@@ -2,7 +2,7 @@
 
 import { ReactNode, useState } from "react";
 import { cn } from "@/lib/utils";
-import { MdOutlineKeyboardArrowDown } from "react-icons/md"; // Default icon import
+import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 
 interface DropdownProps {
   label: string;

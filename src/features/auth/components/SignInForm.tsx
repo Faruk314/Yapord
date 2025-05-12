@@ -7,10 +7,10 @@ import { signInSchema } from "../schemas/auth";
 import { signIn } from "../actions/auth";
 import { z } from "zod";
 import { Input } from "@/components/ui/input";
-import { PrimaryBtn } from "@/components/ui/PrimaryBtn";
+import { PrimaryBtn } from "@/components/buttons/PrimaryBtn";
 import Link from "next/link";
-import { DiscordBtn } from "@/components/ui/DiscordBtn";
-import { GitHubBtn } from "@/components/ui/GitHubBtn";
+import { DiscordBtn } from "@/components/buttons/DiscordBtn";
+import { GitHubBtn } from "@/components/buttons/GitHubBtn";
 
 export default function SignInForm() {
   const {

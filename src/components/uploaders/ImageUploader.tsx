@@ -3,7 +3,7 @@
 import React, { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { Camera } from "lucide-react";
-import { IconBtn } from "./IconBtn";
+import { IconBtn } from "../buttons/IconBtn";
 import { FaPlus } from "react-icons/fa";
 
 interface ImageUploaderProps {

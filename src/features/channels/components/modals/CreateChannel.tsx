@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import DialogWrapper from "@/components/DialogWrapper";
+import DialogWrapper from "@/components/modals/DialogWrapper";
 import ChannelForm from "../ChannelForm";
 import { ChannelType } from "@/drizzle/schema";
 import { Plus } from "lucide-react";
