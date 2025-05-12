@@ -4,4 +4,8 @@ function canCreateChannels(user: { role: ServerRole } | null) {
   return user?.role === "admin" || user?.role === "owner";
 }
 
-export { canCreateChannels };
+function canCreateChannelMessages(user: { role: ServerRole } | null) {
+  return user?.role;
+}
+
+export { canCreateChannels, canCreateChannelMessages };
