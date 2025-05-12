@@ -1,6 +1,45 @@
 import { db } from "@/drizzle/db";
 import { ChannelTable } from "@/drizzle/schema";
-import { revalidateChannelCache } from "../cache/channels";
+import { getChannelIdTag, revalidateChannelCache } from "../cache/channels";
+import { eq } from "drizzle-orm";
+import { cacheTag } from "next/dist/server/use-cache/cache-tag";
+import { getChannelMessagesChannelTag } from "../cache/channelMessages";
+
+async function getChannel(id: string) {
+  "use cache";
+
+  cacheTag(getChannelIdTag(id), getChannelMessagesChannelTag(id));
+
+  const channel = await db.query.ChannelTable.findFirst({
+    where: eq(ChannelTable.id, id),
+    columns: {
+      id: true,
+      name: true,
+      type: true,
+    },
+    with: {
+      messages: {
+        columns: {
+          id: true,
+          content: true,
+          createdAt: true,
+        },
+        with: {
+          user: {
+            columns: {
+              id: true,
+              name: true,
+              image: true,
+            },
+          },
+        },
+        orderBy: (fields, operators) => operators.desc(fields.createdAt),
+      },
+    },
+  });
+
+  return channel;
+}
 
 async function insertChannel(data: typeof ChannelTable.$inferInsert) {
   const [newChannel] = await db
@@ -19,4 +58,4 @@ async function insertChannel(data: typeof ChannelTable.$inferInsert) {
   return newChannel;
 }
 
-export { insertChannel };
+export { insertChannel, getChannel };
