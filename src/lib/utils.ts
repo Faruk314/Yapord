@@ -1,7 +1,7 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { v4 as uuidv4 } from "uuid";
-import { format, isYesterday, isToday } from "date-fns";
+import { format, isToday } from "date-fns";
 
 function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
