@@ -1,4 +1,4 @@
-type CACHE_TAG = "users" | "servers" | "channels";
+type CACHE_TAG = "users" | "servers" | "channels" | "channelMessages";
 
 function getGlobalTag(tag: CACHE_TAG) {
   return `global:${tag}` as const;
@@ -16,4 +16,8 @@ function getServerTag(tag: CACHE_TAG, serverId: string) {
   return `server:${serverId}-${tag}` as const;
 }
 
-export { getGlobalTag, getIdTag, getUserTag, getServerTag };
+function getChannelTag(tag: CACHE_TAG, channelId: string) {
+  return `channel:${channelId}-${tag}` as const;
+}
+
+export { getGlobalTag, getIdTag, getUserTag, getServerTag, getChannelTag };
