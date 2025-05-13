@@ -2,9 +2,10 @@
 
 import { OAuthProvider } from "@/drizzle/schema";
 import { redirect } from "next/navigation";
-import { OAuthClient, getOAuthClient } from "../utils/oauth";
+import { OAuthClient } from "../classes/oauth";
 import { env } from "@/data/env/server";
 import { z } from "zod";
+import { getOAuthClient } from "../utils/oauth";
 
 async function oAuthSignIn(provider: OAuthProvider) {
   const client = getOAuthClient(provider);
