@@ -11,6 +11,7 @@ import { channelMessageSchema } from "../schemas/channelMessage";
 import { z } from "zod";
 import { createChannelMessage } from "../actions/channelMessages";
 import { toast } from "sonner";
+import { useSocket } from "@/context/socketContext";
 
 interface Props {
   user: {
@@ -37,6 +38,9 @@ interface Props {
 
 export default function ChannelChat({ user, channel }: Props) {
   const [channelMessages, setChannelMessages] = useState([...channel.messages]);
+  const socket = useSocket();
+
+  console.log(socket, "socket");
 
   const { handleSubmit, reset, register } = useForm({
     resolver: zodResolver(channelMessageSchema),
