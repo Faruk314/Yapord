@@ -9,7 +9,6 @@ import {
 } from "react";
 import { Socket, io as clientIO } from "socket.io-client";
 import { env } from "@/data/env/client";
-import path from "path";
 
 type SocketContextType = {
   socket: Socket | null;
@@ -42,6 +41,10 @@ export function SocketProvider({ children }: { children: ReactNode }) {
 
     socketInstance.on("disconnect", () => {
       setIsConnected(false);
+    });
+
+    socketInstance.on("connect_error", (err) => {
+      console.error("Connection Error:", err.message);
     });
 
     setSocket(socketInstance);
