@@ -41,8 +41,11 @@ async function getChannel(id: string) {
   return channel;
 }
 
-async function insertChannel(data: typeof ChannelTable.$inferInsert) {
-  const [newChannel] = await db
+async function insertChannel(
+  data: typeof ChannelTable.$inferInsert,
+  trx: Omit<typeof db, "$client">
+) {
+  const [newChannel] = await trx
     .insert(ChannelTable)
     .values(data)
     .onConflictDoNothing()

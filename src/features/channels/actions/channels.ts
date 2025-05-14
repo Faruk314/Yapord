@@ -4,6 +4,8 @@ import { channelSchema } from "../schemas/channel";
 import { insertChannel as insertChannelDb } from "../db/channels";
 import { canCreateChannels } from "../permissions/channels";
 import { getCurrentServerMember } from "@/features/servers/actions/serverMembers";
+import { db } from "@/drizzle/db";
+import { createChannelRoom } from "../db/channelRooms";
 
 async function createChannel(
   serverId: string,
@@ -16,11 +18,14 @@ async function createChannel(
   }
 
   try {
-    await insertChannelDb({ ...data, serverId });
+    await db.transaction(async (trx) => {
+      const newChannel = await insertChannelDb({ ...data, serverId }, trx);
+
+      await createChannelRoom(newChannel.id);
+    });
 
     return { error: false, message: "Successfully created your channel" };
-  } catch (error) {
-    console.error(error);
+  } catch {
     return { error: true, message: "Unable to create channel" };
   }
 }
