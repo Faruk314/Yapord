@@ -33,7 +33,7 @@ async function getChannel(id: string) {
             },
           },
         },
-        orderBy: (fields, operators) => operators.desc(fields.createdAt),
+        orderBy: (fields, operators) => operators.asc(fields.createdAt),
       },
     },
   });
