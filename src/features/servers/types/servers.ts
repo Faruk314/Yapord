@@ -1,3 +1,5 @@
+import { ServerRole } from "@/drizzle/schema";
+
 interface Server {
   id: string;
   name: string;
@@ -7,4 +9,11 @@ interface Server {
   updatedAt?: Date;
 }
 
-export type { Server };
+interface IserverMember {
+  id: string;
+  name: string;
+  image: string | null;
+  role: ServerRole;
+}
+
+export type { Server, IserverMember };
