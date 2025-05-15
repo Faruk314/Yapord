@@ -6,7 +6,11 @@ import { insertChannel as insertChannelDb } from "../db/channels";
 import { canCreateChannels } from "../permissions/channels";
 import { getCurrentServerMember } from "@/features/servers/actions/serverMembers";
 import { db } from "@/drizzle/db";
-import { createChannelRoom, joinChannelRoom } from "../db/channelRooms";
+import {
+  createChannelRoom,
+  joinChannelRoom,
+  leaveChannelRoom,
+} from "../db/channelRooms";
 
 async function createChannel(
   serverId: string,
@@ -47,4 +51,20 @@ async function joinChannel(channelId: string) {
   }
 }
 
-export { createChannel, joinChannel };
+async function leaveChannel(channelId: string) {
+  const serverMember = await getCurrentServerMember();
+
+  if (!serverMember) {
+    return { error: true, message: "Unable to leave channel" };
+  }
+
+  try {
+    await leaveChannelRoom(channelId, serverMember.userId);
+
+    return { error: false, message: "Successfully left the channel" };
+  } catch {
+    return { error: true, message: "Unable to leave channel" };
+  }
+}
+
+export { createChannel, joinChannel, leaveChannel };
