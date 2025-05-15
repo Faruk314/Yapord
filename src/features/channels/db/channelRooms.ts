@@ -1,8 +1,10 @@
 import { redisClient } from "@/redis/redis";
 import { IchannelRoom } from "../types/channel";
 import { IserverMember } from "@/features/servers/types/servers";
+import { getUser } from "@/features/auth/db/redis/user";
 
 const ROOMS_KEY = "channels";
+const USERS_KEY = "users";
 
 async function createChannelRoom(roomId: string) {
   const roomExists = await redisClient.hexists(ROOMS_KEY, roomId);
@@ -37,10 +39,24 @@ async function joinChannelRoom(joinedUser: IserverMember, roomId: string) {
 
   if (inChannelRoom) throw new Error("User is already in this channel");
 
+  const existingUser = await getUser(joinedUser.id);
+
+  if (!existingUser) throw new Error("User not found in Redis");
+
+  if (existingUser.channelId) {
+    await leaveChannelRoom(existingUser.channelId, joinedUser.id);
+  }
+
   channelRoom.users.push(joinedUser);
 
   try {
-    await redisClient.hset(ROOMS_KEY, roomId, JSON.stringify(channelRoom));
+    const updatedUser = { ...existingUser, channelId: roomId };
+    const multi = redisClient.multi();
+
+    multi.hset(ROOMS_KEY, roomId, JSON.stringify(channelRoom));
+    multi.hset(USERS_KEY, joinedUser.id, JSON.stringify(updatedUser));
+
+    await multi.exec();
   } catch {
     throw new Error("Failed to join channel room");
   }
@@ -53,10 +69,20 @@ async function leaveChannelRoom(roomId: string, userId: string) {
 
   if (!inChannelRoom) throw new Error("User is not in this channel");
 
+  const existingUser = await getUser(userId);
+
+  if (!existingUser) throw new Error("User not found in Redis");
+
   channelRoom.users = channelRoom.users.filter((user) => user.id !== userId);
 
   try {
-    await redisClient.hset(ROOMS_KEY, roomId, JSON.stringify(channelRoom));
+    const updatedUser = { ...existingUser, channelId: null };
+    const multi = redisClient.multi();
+
+    multi.hset(ROOMS_KEY, roomId, JSON.stringify(channelRoom));
+    multi.hset(USERS_KEY, userId, JSON.stringify(updatedUser));
+
+    await multi.exec();
   } catch {
     throw new Error("Failed to leave channel room");
   }
