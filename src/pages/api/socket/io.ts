@@ -6,6 +6,7 @@ import ChannelListeners from "@/features/channels/webSocket/listeners/server/cha
 import { db } from "@/drizzle/db";
 import { eq } from "drizzle-orm";
 import { UserTable } from "@/drizzle/schema";
+import { deleteUser, insertUser } from "@/features/auth/db/redis/user";
 
 export const config = {
   api: {
@@ -73,7 +74,17 @@ function ioHandler(req: NextApiRequest, res: NextApiResponseServerIO) {
       }
     });
 
-    io.on("connection", (socket) => {
+    io.on("connection", async (socket) => {
+      socket.on("disconnect", async () => {
+        await deleteUser(socket.user.id);
+      });
+
+      await insertUser({
+        id: socket.user.id,
+        socketId: socket.id,
+        channelId: null,
+      });
+
       const channelListeners = new ChannelListeners(io, socket);
 
       channelListeners.registerListeners();
