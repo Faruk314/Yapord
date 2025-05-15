@@ -5,13 +5,14 @@ import { Message } from "@/components/chat/Message";
 import { IconBtn } from "@/components/buttons/IconBtn";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Upload } from "lucide-react";
-import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { channelMessageSchema } from "../schemas/channelMessage";
 import { z } from "zod";
 import { createChannelMessage } from "../actions/channelMessages";
 import { toast } from "sonner";
 import { IchannelMessage } from "../types/channel";
+import { useChannelStore } from "../store/channel";
+import { useEffect } from "react";
 
 interface Props {
   user: {
@@ -27,12 +28,19 @@ interface Props {
 }
 
 export default function ChannelChat({ user, channel }: Props) {
-  const [channelMessages, setChannelMessages] = useState([...channel.messages]);
+  const setMessages = useChannelStore((state) => state.setMessages);
+  const addMessage = useChannelStore((state) => state.addMessage);
+  const channelMessages = useChannelStore((state) => state.channelMessages);
 
   const { handleSubmit, reset, register } = useForm({
     resolver: zodResolver(channelMessageSchema),
     defaultValues: { content: "", senderId: user.id, channelId: channel.id },
   });
+
+  useEffect(() => {
+    setMessages(channel.messages);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   async function onSubmit(values: z.infer<typeof channelMessageSchema>) {
     const data = await createChannelMessage(channel.id, values);
@@ -44,7 +52,7 @@ export default function ChannelChat({ user, channel }: Props) {
 
     if (!data.messageData) return;
 
-    setChannelMessages((prev) => [...prev, { ...data.messageData, user }]);
+    addMessage({ ...data.messageData, user });
 
     reset();
   }
