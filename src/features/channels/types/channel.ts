@@ -1,4 +1,5 @@
 import { ChannelType } from "@/drizzle/schema";
+import { IserverMember } from "@/features/servers/types/servers";
 
 interface Ichannel {
   id: string;
@@ -17,4 +18,9 @@ interface IchannelMessage {
   };
 }
 
-export type { Ichannel, IchannelMessage };
+interface IchannelRoom {
+  id: string;
+  users: IserverMember[];
+}
+
+export type { Ichannel, IchannelMessage, IchannelRoom };

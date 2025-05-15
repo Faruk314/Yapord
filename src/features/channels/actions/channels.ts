@@ -1,11 +1,12 @@
 "use server";
+
 import { z } from "zod";
 import { channelSchema } from "../schemas/channel";
 import { insertChannel as insertChannelDb } from "../db/channels";
 import { canCreateChannels } from "../permissions/channels";
 import { getCurrentServerMember } from "@/features/servers/actions/serverMembers";
 import { db } from "@/drizzle/db";
-import { createChannelRoom } from "../db/channelRooms";
+import { createChannelRoom, joinChannelRoom } from "../db/channelRooms";
 
 async function createChannel(
   serverId: string,
@@ -30,4 +31,20 @@ async function createChannel(
   }
 }
 
-export { createChannel };
+async function joinChannel(channelId: string) {
+  const serverMember = await getCurrentServerMember({ withFullUser: true });
+
+  if (!serverMember) {
+    return { error: true, message: "Unable to join channel" };
+  }
+
+  try {
+    await joinChannelRoom(serverMember, channelId);
+
+    return { error: false, message: "Successfully joined channel" };
+  } catch {
+    return { error: true, message: "Unable to join channel" };
+  }
+}
+
+export { createChannel, joinChannel };
