@@ -7,10 +7,9 @@ import { canCreateChannels } from "../permissions/channels";
 import { getCurrentServerMember } from "@/features/servers/actions/serverMembers";
 import { db } from "@/drizzle/db";
 import {
-  createChannelRoom,
-  joinChannelRoom,
-  leaveChannelRoom,
-} from "../db/channelRooms";
+  addChannelMember,
+  removeChannelMember,
+} from "../db/redis/channelRooms";
 
 async function createChannel(
   serverId: string,
@@ -24,9 +23,7 @@ async function createChannel(
 
   try {
     await db.transaction(async (trx) => {
-      const newChannel = await insertChannelDb({ ...data, serverId }, trx);
-
-      await createChannelRoom(newChannel.id);
+      await insertChannelDb({ ...data, serverId }, trx);
     });
 
     return { error: false, message: "Successfully created your channel" };
@@ -43,7 +40,7 @@ async function joinChannel(channelId: string) {
   }
 
   try {
-    await joinChannelRoom(serverMember, channelId);
+    await addChannelMember(channelId, serverMember.id);
 
     return { error: false, message: "Successfully joined channel" };
   } catch {
@@ -59,7 +56,7 @@ async function leaveChannel(channelId: string) {
   }
 
   try {
-    await leaveChannelRoom(channelId, serverMember.userId);
+    await removeChannelMember(channelId, serverMember.userId);
 
     return { error: false, message: "Successfully left the channel" };
   } catch {

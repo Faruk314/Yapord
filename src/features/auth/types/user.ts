@@ -6,6 +6,8 @@ interface Iuser {
 
 interface IredisUser {
   id: string;
+  name: string;
+  image: string | null;
   channelId: string | null;
   socketId: string;
 }

@@ -81,6 +81,8 @@ function ioHandler(req: NextApiRequest, res: NextApiResponseServerIO) {
 
       await insertUser({
         id: socket.user.id,
+        name: socket.user.name,
+        image: socket.user.image,
         socketId: socket.id,
         channelId: null,
       });
