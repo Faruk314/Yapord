@@ -34,4 +34,8 @@ async function removeChannelMember(channelId: string, userId: string) {
   }
 }
 
-export { addChannelMember, removeChannelMember };
+async function addChannelToServerSet(channelId: string, serverId: string) {
+  return await redisClient.sadd(`server:${serverId}:channels`, channelId);
+}
+
+export { addChannelMember, removeChannelMember, addChannelToServerSet };

@@ -5,11 +5,12 @@ import { channelSchema } from "../schemas/channel";
 import { insertChannel as insertChannelDb } from "../db/channels";
 import { canCreateChannels } from "../permissions/channels";
 import { getCurrentServerMember } from "@/features/servers/actions/serverMembers";
-import { db } from "@/drizzle/db";
 import {
   addChannelMember,
+  addChannelToServerSet,
   removeChannelMember,
 } from "../db/redis/channelRooms";
+import { db } from "@/drizzle/db";
 
 async function createChannel(
   serverId: string,
@@ -23,7 +24,13 @@ async function createChannel(
 
   try {
     await db.transaction(async (trx) => {
-      await insertChannelDb({ ...data, serverId }, trx);
+      const newChannel = await insertChannelDb({ ...data, serverId }, trx);
+
+      try {
+        await addChannelToServerSet(newChannel.id, serverId);
+      } catch {
+        throw new Error("Failed to add channel to Redis set");
+      }
     });
 
     return { error: false, message: "Successfully created your channel" };
