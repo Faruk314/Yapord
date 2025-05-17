@@ -1,9 +1,30 @@
 import { db } from "@/drizzle/db";
 import { ChannelTable } from "@/drizzle/schema";
-import { getChannelIdTag, revalidateChannelCache } from "../cache/channels";
+import {
+  getChannelIdTag,
+  getChannelServerTag,
+  revalidateChannelCache,
+} from "../cache/channels";
 import { eq } from "drizzle-orm";
 import { cacheTag } from "next/dist/server/use-cache/cache-tag";
 import { getChannelMessagesChannelTag } from "../cache/channelMessages";
+
+async function getChannels(serverId: string) {
+  "use cache";
+
+  cacheTag(getChannelServerTag(serverId));
+
+  const channels = await db
+    .select({
+      id: ChannelTable.id,
+      name: ChannelTable.name,
+      type: ChannelTable.type,
+    })
+    .from(ChannelTable)
+    .where(eq(ChannelTable.serverId, serverId));
+
+  return channels;
+}
 
 async function getChannel(id: string) {
   "use cache";
@@ -61,4 +82,4 @@ async function insertChannel(
   return newChannel;
 }
 
-export { insertChannel, getChannel };
+export { getChannels, getChannel, insertChannel };

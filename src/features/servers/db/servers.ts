@@ -10,10 +10,7 @@ import {
 } from "../cache/servers";
 import { eq } from "drizzle-orm";
 import { Server } from "../types/servers";
-import {
-  getChannelGlobalTag,
-  getChannelServerTag,
-} from "@/features/channels/cache/channels";
+import { getChannelGlobalTag } from "@/features/channels/cache/channels";
 
 async function getServers(userId: string) {
   "use cache";
@@ -35,7 +32,7 @@ async function getServers(userId: string) {
 async function getServer(id: string) {
   "use cache";
 
-  cacheTag(getServerIdTag(id), getChannelServerTag(id));
+  cacheTag(getServerIdTag(id));
 
   const server = await db.query.ServerTable.findFirst({
     columns: {
@@ -45,11 +42,6 @@ async function getServer(id: string) {
       ownerId: true,
     },
     where: eq(ServerTable.id, id),
-    with: {
-      channels: {
-        columns: { id: true, name: true, type: true },
-      },
-    },
   });
 
   return server;
