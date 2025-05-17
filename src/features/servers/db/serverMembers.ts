@@ -1,6 +1,30 @@
-import { ServerMemberTable } from "@/drizzle/schema";
+import { ServerMemberTable, UserTable } from "@/drizzle/schema";
 import { db } from "@/drizzle/db";
 import { eq } from "drizzle-orm";
+import { cacheTag } from "next/dist/server/use-cache/cache-tag";
+import {
+  getServerMembersIdTag,
+  revalidateServerMembersCache,
+} from "../cache/serverMembers";
+
+async function getServerMembers(serverId: string) {
+  "use cache";
+
+  cacheTag(getServerMembersIdTag(serverId));
+
+  const members = await db
+    .select({
+      id: ServerMemberTable.userId,
+      role: ServerMemberTable.role,
+      name: UserTable.name,
+      image: UserTable.image,
+    })
+    .from(ServerMemberTable)
+    .where(eq(ServerMemberTable.serverId, serverId))
+    .innerJoin(UserTable, eq(ServerMemberTable.userId, UserTable.id));
+
+  return members;
+}
 
 async function getServerMember(userId: string) {
   return db.query.ServerMemberTable.findFirst({
@@ -27,7 +51,9 @@ async function insertServerMember(
     throw new Error("Failed to insert server member");
   }
 
+  revalidateServerMembersCache(data.serverId);
+
   return newMember;
 }
 
-export { getServerMember, insertServerMember };
+export { getServerMembers, getServerMember, insertServerMember };
