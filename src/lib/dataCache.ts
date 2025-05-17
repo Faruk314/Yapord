@@ -1,4 +1,9 @@
-type CACHE_TAG = "users" | "servers" | "channels" | "channelMessages";
+type CACHE_TAG =
+  | "users"
+  | "servers"
+  | "serverMembers"
+  | "channels"
+  | "channelMessages";
 
 function getGlobalTag(tag: CACHE_TAG) {
   return `global:${tag}` as const;
