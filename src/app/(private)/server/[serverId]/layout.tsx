@@ -4,6 +4,7 @@ import { ServerDropdownMenu } from "@/features/servers/components/ServerDropdown
 import { redirect } from "next/navigation";
 import { getCurrentServerMember } from "@/features/servers/actions/serverMembers";
 import Channels from "@/features/channels/components/Channels";
+import { getServerMembers } from "@/features/servers/db/serverMembers";
 
 export default async function ServerLayout({
   params,
@@ -18,7 +19,9 @@ export default async function ServerLayout({
 
   const serverMember = await getCurrentServerMember();
 
-  if (!server || !serverMember) redirect("/home");
+  const serverMembers = await getServerMembers(serverId);
+
+  if (!server || !serverMember || !serverMembers) redirect("/home");
 
   return (
     <>
@@ -28,6 +31,7 @@ export default async function ServerLayout({
 
           <ServerDropdownMenu
             serverMemberRole={serverMember?.role}
+            serverMembers={serverMembers}
             ownerId={serverMember.userId}
             server={server}
           />

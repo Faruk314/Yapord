@@ -8,39 +8,48 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { FaEdit, FaTrash, FaUsers } from "react-icons/fa";
-import { Server } from "../types/servers";
+import { IserverMember, Server } from "../types/servers";
 import { AlertDialogBox } from "@/components/modals/AlertDialog";
 import { deleteServer } from "../actions/servers";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { ServerRole } from "@/drizzle/schema";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import { HiX } from "react-icons/hi";
 import ServerForm from "./ServerForm";
 import DialogWrapper from "@/components/modals/DialogWrapper";
 import ServerMembers from "./ServerMembers";
+import { useServerStore } from "../store/server";
 
 interface Props {
   ownerId: string;
   server: Server;
   serverMemberRole: ServerRole;
+  serverMembers: IserverMember[];
 }
 
 export function ServerDropdownMenu({
   ownerId,
   server,
   serverMemberRole,
+  serverMembers,
 }: Props) {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [isMembersOpen, setIsMembersOpen] = useState(false);
+  const setServerMembers = useServerStore((state) => state.setServerMembers);
 
   const isModerator =
     serverMemberRole === "owner" || serverMemberRole === "admin";
   const isOwner = serverMemberRole === "owner";
+
+  useEffect(() => {
+    setServerMembers(serverMembers);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   async function handleDeleteServer() {
     const data = await deleteServer(server.id);
