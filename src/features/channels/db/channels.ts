@@ -8,6 +8,7 @@ import {
 import { eq } from "drizzle-orm";
 import { cacheTag } from "next/dist/server/use-cache/cache-tag";
 import { getChannelMessagesChannelTag } from "../cache/channelMessages";
+import { populateChannelsWithMembers } from "./redis/channelRooms";
 
 async function getChannels(serverId: string) {
   "use cache";
@@ -23,7 +24,7 @@ async function getChannels(serverId: string) {
     .from(ChannelTable)
     .where(eq(ChannelTable.serverId, serverId));
 
-  return channels;
+  return await populateChannelsWithMembers(channels);
 }
 
 async function getChannel(id: string) {
