@@ -5,6 +5,7 @@ interface Ichannel {
   id: string;
   name: string;
   type: ChannelType;
+  members: string[];
 }
 
 interface IchannelMessage {
