@@ -7,6 +7,7 @@ import { BiEdit } from "react-icons/bi";
 import EditUserForm from "../EditUserForm";
 import { z } from "zod";
 import { userSchema } from "../../schemas/user";
+import Avatar from "@/components/ui/Avatar";
 
 export default function EditUser({
   user,
@@ -26,11 +27,13 @@ export default function EditUser({
       >
         <EditUserForm userId={userId} user={user} />
       </DialogWrapper>
-      <IconBtn
+      <button
         onClick={() => setIsOpen(true)}
-        className="h-10 w-10"
-        icon={<BiEdit />}
-      />
+        className="flex items-center space-x-2 font-semibold cursor-pointer"
+      >
+        <Avatar name={user.name} />
+        <span>{user.name}</span>
+      </button>
     </>
   );
 }
