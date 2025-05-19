@@ -1,6 +1,7 @@
+import HomeNavigation from "@/components/navigation/HomeNavigation";
 import Avatar from "@/components/ui/Avatar";
 
-export default async function HomeLayout({
+export default async function HomeNav({
   children,
 }: {
   children: React.ReactNode;
@@ -9,8 +10,10 @@ export default async function HomeLayout({
   return (
     <>
       <div className="border-r border-gray-300 overflow-y-auto h-[100vh] lg:w-[20rem]">
+        <HomeNavigation />
+
         <div className="p-4">
-          <span className="font-semibold">Direct Messages</span>
+          <span className="font-semibold uppercase">Direct Messages</span>
 
           <div className="flex flex-col space-y-3 pt-4">
             {directMessages.length > 0 ? (
