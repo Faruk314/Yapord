@@ -1,13 +1,13 @@
 import { create } from "zustand";
 import { IchannelMessage } from "../types/channel";
 
-type ChannelState = {
+type ChannelChatState = {
   channelMessages: IchannelMessage[];
   setMessages: (messages: IchannelMessage[]) => void;
   addMessage: (message: IchannelMessage) => void;
 };
 
-export const useChannelStore = create<ChannelState>((set) => ({
+export const useChannelChatStore = create<ChannelChatState>((set) => ({
   channelMessages: [],
 
   setMessages: (messages) => set({ channelMessages: messages }),

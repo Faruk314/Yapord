@@ -11,7 +11,7 @@ import { z } from "zod";
 import { createChannelMessage } from "../actions/channelMessages";
 import { toast } from "sonner";
 import { IchannelMessage } from "../types/channel";
-import { useChannelStore } from "../store/channel";
+import { useChannelChatStore } from "../store/channelChat";
 import { useEffect } from "react";
 
 interface Props {
@@ -28,9 +28,9 @@ interface Props {
 }
 
 export default function ChannelChat({ user, channel }: Props) {
-  const setMessages = useChannelStore((state) => state.setMessages);
-  const addMessage = useChannelStore((state) => state.addMessage);
-  const channelMessages = useChannelStore((state) => state.channelMessages);
+  const setMessages = useChannelChatStore((state) => state.setMessages);
+  const addMessage = useChannelChatStore((state) => state.addMessage);
+  const channelMessages = useChannelChatStore((state) => state.channelMessages);
 
   const { handleSubmit, reset, register } = useForm({
     resolver: zodResolver(channelMessageSchema),
