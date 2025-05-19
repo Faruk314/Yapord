@@ -10,7 +10,7 @@ export function SecondaryBtn({
   return (
     <Button
       className={cn(
-        "bg-transparent hover:bg-gray-200 cursor-pointer font-black uppercase shadow-none text-black",
+        "bg-transparent hover:bg-gray-100 cursor-pointer font-black uppercase shadow-none text-black",
         className
       )}
       {...props}
