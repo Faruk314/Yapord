@@ -27,8 +27,8 @@ export default async function ServerLayout({
 
   return (
     <>
-      <div className="border-r-2 border-gray-300 overflow-y-auto h-[100vh]">
-        <div className="flex items-center justify-between lg:w-[20rem] h-18 px-4 border-b-2 border-gray-300">
+      <div className="border-r border-gray-300 overflow-y-auto h-[100vh]">
+        <div className="flex items-center justify-between lg:w-[20rem] h-18 px-4 border-b border-gray-300">
           <span className="text-xl font-semibold">{server?.name}</span>
 
           <ServerDropdownMenu

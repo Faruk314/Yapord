@@ -21,7 +21,7 @@ export default async function ChannelPage({
 
   return (
     <div className="flex flex-col h-screen">
-      <div className="flex items-center justify-between h-18 px-4 border-b-2 border-gray-300">
+      <div className="flex items-center justify-between h-18 px-4 border-b border-gray-300">
         <span className="text-xl font-semibold">{channel.name}</span>
       </div>
 

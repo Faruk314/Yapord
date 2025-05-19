@@ -21,7 +21,7 @@ export async function SideBar() {
   const user = await getCurrentUser({ redirectIfNotFound: true });
 
   return (
-    <div className="flex flex-col space-y-2 p-4 border-r-2 border-gray-300">
+    <div className="flex flex-col space-y-2 p-4 border-r border-gray-300">
       <Link
         href={`/home/`}
         className="cursor-pointer flex items-center justify-center relative w-12 h-12 rounded-full overflow-hidden bg-blue-600 text-white font-black uppercase"
