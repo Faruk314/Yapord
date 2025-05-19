@@ -10,7 +10,7 @@ interface Props {
 
 export default function UserSettingsFooter({ user }: Props) {
   return (
-    <div className="fixed z-20 bottom-2 left-2 bg-white flex items-center justify-between w-[23rem] p-2 rounded-md shadow-xl border border">
+    <div className="fixed z-20 bottom-4 left-4 bg-white flex items-center justify-between w-[23rem] p-2 rounded-md shadow-xl border border-gray-300">
       <EditUser user={user} userId={user.id} />
 
       <div className="flex space-x-2">
