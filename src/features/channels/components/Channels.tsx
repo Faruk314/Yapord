@@ -4,7 +4,13 @@ import CreateChannel from "./modals/CreateChannel";
 import Channel from "./Channel";
 import { getChannels } from "../db/channels";
 
-export default async function Channels({ serverId }: { serverId: string }) {
+export default async function Channels({
+  serverId,
+  userId,
+}: {
+  serverId: string;
+  userId: string;
+}) {
   const channels = await getChannels(serverId);
 
   return (
@@ -17,6 +23,7 @@ export default async function Channels({ serverId }: { serverId: string }) {
                 .filter((c) => c.type === "text")
                 .map((channel) => (
                   <Channel
+                    userId={userId}
                     serverId={serverId}
                     key={channel.id}
                     channel={channel}
@@ -37,6 +44,7 @@ export default async function Channels({ serverId }: { serverId: string }) {
               .map((channel) => (
                 <Channel
                   serverId={serverId}
+                  userId={userId}
                   key={channel.id}
                   channel={channel}
                 />

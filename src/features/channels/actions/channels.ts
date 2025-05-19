@@ -47,9 +47,9 @@ async function joinChannel(channelId: string) {
   }
 
   try {
-    await addChannelMember(channelId, serverMember.id);
+    const data = await addChannelMember(channelId, serverMember.id);
 
-    return { error: false, message: "Successfully joined channel" };
+    return { error: false, message: "Successfully joined channel", data };
   } catch {
     return { error: true, message: "Unable to join channel" };
   }

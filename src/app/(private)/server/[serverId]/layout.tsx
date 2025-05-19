@@ -15,13 +15,15 @@ export default async function ServerLayout({
 }) {
   const { serverId } = await params;
 
-  const server = await getServer(serverId);
-
   const serverMember = await getCurrentServerMember();
+
+  if (!serverMember) redirect("/home");
+
+  const server = await getServer(serverId);
 
   const serverMembers = await getServerMembers(serverId);
 
-  if (!server || !serverMember || !serverMembers) redirect("/home");
+  if (!server || !serverMembers) redirect("/home");
 
   return (
     <>
@@ -37,7 +39,7 @@ export default async function ServerLayout({
           />
         </div>
 
-        <Channels serverId={serverId} />
+        <Channels serverId={serverId} userId={serverMember.userId} />
       </div>
 
       {children}
