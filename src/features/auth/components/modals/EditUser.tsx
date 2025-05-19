@@ -1,19 +1,16 @@
 "use client";
 
 import DialogWrapper from "@/components/modals/DialogWrapper";
-import { IconBtn } from "@/components/buttons/IconBtn";
 import React, { useState } from "react";
-import { BiEdit } from "react-icons/bi";
 import EditUserForm from "../EditUserForm";
-import { z } from "zod";
-import { userSchema } from "../../schemas/user";
 import Avatar from "@/components/ui/Avatar";
+import { Iuser } from "../../types/user";
 
 export default function EditUser({
   user,
   userId,
 }: {
-  user: z.infer<typeof userSchema>;
+  user: Iuser;
   userId: string;
 }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -31,7 +28,7 @@ export default function EditUser({
         onClick={() => setIsOpen(true)}
         className="flex items-center space-x-2 font-semibold cursor-pointer"
       >
-        <Avatar name={user.name} />
+        <Avatar name={user.name} imageSrc={user.image} />
         <span>{user.name}</span>
       </button>
     </>

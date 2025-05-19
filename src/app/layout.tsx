@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { Toaster } from "sonner";
 import "./globals.css";
 import { SocketProvider } from "@/context/socketContext";
+import UserSettingsFooter from "@/features/auth/components/UserSettingsFooter";
+import { getCurrentUser } from "@/features/auth/actions/user";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -19,11 +21,16 @@ export const metadata: Metadata = {
   description: "App made for yaping",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const user = await getCurrentUser({
+    redirectIfNotFound: true,
+    withFullUser: true,
+  });
+
   return (
     <html lang="en">
       <body
@@ -32,6 +39,8 @@ export default function RootLayout({
         <SocketProvider>{children}</SocketProvider>
 
         <Toaster position="top-right" richColors />
+
+        <UserSettingsFooter user={user} />
       </body>
     </html>
   );
