@@ -15,6 +15,13 @@ async function getUser(id: string) {
   });
 }
 
+async function getUserByName(name: string) {
+  return db.query.UserTable.findFirst({
+    columns: { id: true },
+    where: eq(UserTable.name, name),
+  });
+}
+
 async function insertUser(data: {
   name: string;
   email: string;
@@ -62,4 +69,4 @@ async function updateUser(
   return updatedUser;
 }
 
-export { getUser, insertUser, updateUser };
+export { getUser, getUserByName, insertUser, updateUser };
