@@ -1,4 +1,5 @@
 import { getCurrentUser } from "@/features/auth/actions/user";
+import UserSettingsFooter from "@/features/auth/components/UserSettingsFooter";
 import ServerList from "@/features/servers/components/ServerList";
 import CreateServer from "@/features/servers/components/modals/CreateServer";
 import Link from "next/link";
@@ -9,10 +10,17 @@ export default async function layout({
 }: {
   children: React.ReactNode;
 }) {
+  const user = await getCurrentUser({
+    redirectIfNotFound: true,
+    withFullUser: true,
+  });
+
   return (
     <main className="grid grid-cols-[auto_1fr] lg:grid-cols-[auto_auto_1fr] min-h-screen">
       <SideBar />
       <>{children}</>
+
+      <UserSettingsFooter user={user} />
     </main>
   );
 }
