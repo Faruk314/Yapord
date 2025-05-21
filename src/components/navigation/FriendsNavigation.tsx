@@ -15,6 +15,10 @@ const navItems = [
     label: "All",
   },
   {
+    href: "/home/friends/pending",
+    label: "Pending",
+  },
+  {
     href: "/home/friends/add",
     label: "Add friend",
   },
