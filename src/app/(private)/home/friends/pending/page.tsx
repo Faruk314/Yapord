@@ -9,7 +9,7 @@ export default async function FriendRequestsPage() {
   const friendRequests = await getFriendRequests(user.id);
 
   return (
-    <section className="p-4 flex flex-col space-y-10">
+    <section className="p-4 flex flex-col space-y-4">
       <span className="text-2xl font-black">PENDING REQUESTS</span>
 
       {friendRequests.length > 0 ? (
