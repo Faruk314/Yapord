@@ -1,14 +1,10 @@
-import { getIdTag, getUserTag } from "@/lib/dataCache";
+import { getUserTag } from "@/lib/dataCache";
 import { revalidateTag } from "next/cache";
 
-export function getFriendUserTag(userId: string) {
-  return getUserTag("friends", userId);
+export function getFriendRequestUserTag(userId: string) {
+  return getUserTag("friendRequests", userId);
 }
 
-export function getFriendIdTag(id: string) {
-  return getIdTag("friends", id);
-}
-
-export function revalidateFriendCache({ userId }: { userId: string }) {
-  revalidateTag(getFriendUserTag(userId));
+export function revalidateFriendRequestsCache({ userId }: { userId: string }) {
+  revalidateTag(getFriendRequestUserTag(userId));
 }
