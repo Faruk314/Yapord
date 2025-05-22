@@ -5,3 +5,6 @@ export * from "./schema/serverMember";
 export * from "./schema/channel";
 export * from "./schema/channelMessage";
 export * from "./schema/friend";
+export * from "./schema/chat";
+export * from "./schema/chatMessage";
+export * from "./schema/chatParticipant";
