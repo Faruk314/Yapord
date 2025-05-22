@@ -5,6 +5,9 @@ import { UserOAuthAccountTable } from "./userOAuth";
 import { ServerTable } from "./server";
 import { ServerMemberTable } from "./serverMember";
 import { FriendTable } from "./friend";
+import { ChatMessagesTable } from "./chatMessage";
+import { ChannelMessageTable } from "./channelMessage";
+import { ChatParticipantsTable } from "./chatParticipant";
 
 export const userRoles = ["admin", "user"] as const;
 export type UserRole = (typeof userRoles)[number];
@@ -28,4 +31,7 @@ export const userRelations = relations(UserTable, ({ many }) => ({
   serverMemberships: many(ServerMemberTable),
   friendshipsInitiated: many(FriendTable, { relationName: "userA" }),
   friendshipsReceived: many(FriendTable, { relationName: "userB" }),
+  channelMessages: many(ChannelMessageTable),
+  messages: many(ChatMessagesTable),
+  chatParticipations: many(ChatParticipantsTable),
 }));
