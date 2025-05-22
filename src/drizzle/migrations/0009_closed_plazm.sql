@@ -1,0 +1,1 @@
+ALTER TABLE "chats" ADD COLUMN "chat_key" varchar(100);

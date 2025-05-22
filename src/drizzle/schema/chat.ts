@@ -12,6 +12,7 @@ export const ChatTable = pgTable("chats", {
   id,
   name: varchar("name", { length: 40 }),
   type: chatTypeEnum().notNull().default("private"),
+  chatKey: varchar("chat_key", { length: 100 }),
   createdAt,
   updatedAt,
 });
