@@ -5,7 +5,7 @@ import { ChatMessagesTable } from "@/drizzle/schema";
 import { eq, asc } from "drizzle-orm";
 
 async function getChatMessages(chatId: string, page = 0) {
-  const limit = 50;
+  const limit = 40;
   const offset = page * limit;
 
   const messages = await db
