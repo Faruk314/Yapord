@@ -7,12 +7,14 @@ import { formatMessageTime } from "@/lib/utils";
 interface Props {
   senderName: string;
   message: string;
+  createdAt: Date;
   imageSrc: string | null;
   isSameSenderAsPrevious: boolean;
 }
 
 export function Message(props: Props) {
-  const { senderName, message, isSameSenderAsPrevious, imageSrc } = props;
+  const { senderName, message, isSameSenderAsPrevious, imageSrc, createdAt } =
+    props;
 
   const [isHovering, setIsHovering] = useState(false);
 
@@ -24,7 +26,7 @@ export function Message(props: Props) {
         className="flex items-baseline space-x-4 px-4 hover:bg-white rounded"
       >
         <span className="text-[0.8rem] w-12">
-          {isHovering ? formatMessageTime(new Date()) : null}
+          {isHovering ? formatMessageTime(new Date(createdAt)) : null}
         </span>
 
         <p className="break-all whitespace-pre-line">{message}</p>
@@ -40,7 +42,9 @@ export function Message(props: Props) {
       <div>
         <div className="flex items-baseline space-x-2">
           <span className="font-semibold">{senderName}</span>
-          <span className="text-[0.8rem]">{formatMessageTime(new Date())}</span>
+          <span className="text-[0.8rem]">
+            {formatMessageTime(new Date(createdAt))}
+          </span>
         </div>
         <p className="break-all whitespace-pre-line">{message}</p>
       </div>
