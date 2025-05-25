@@ -14,6 +14,7 @@ import { createChatMessage } from "../actions/chatMessages";
 import { chatMessageSchema } from "../schemas/chatMessage";
 import { toast } from "sonner";
 import InfiniteScroll from "react-infinite-scroll-component";
+import { Spinner } from "@/components/loaders/Spinner";
 
 interface Props {
   chatId: string;
@@ -35,7 +36,7 @@ export default function PrivateChat({
     },
   });
 
-  const { data, status, fetchNextPage, isFetchingNextPage, hasNextPage } =
+  const { data, fetchNextPage, isFetchingNextPage, hasNextPage } =
     useInfiniteQuery({
       queryKey: ["chatMessages", chatId],
       queryFn: ({ pageParam = 0 }) => getChatMessages(chatId, pageParam),
@@ -59,14 +60,11 @@ export default function PrivateChat({
     reset();
   }
 
-  console.log(data, "data");
-
   return (
     <div className="flex flex-col flex-1 min-h-0 bg-muted">
       <div
         id="chat-scroll"
-        className="flex-1 overflow-y-auto pt-4 pb-2 bg-muted"
-        style={{ display: "flex", flexDirection: "column-reverse" }}
+        className="flex-1 flex flex-col-reverse overflow-y-auto pt-4 pb-2 bg-muted relative"
       >
         <InfiniteScroll
           dataLength={data?.pages.flatMap((p) => p.messages).length ?? 0}
@@ -76,7 +74,7 @@ export default function PrivateChat({
           hasMore={hasNextPage ?? false}
           inverse={true}
           scrollableTarget="chat-scroll"
-          loader={<div className="text-center p-4">Loading...</div>}
+          loader={false}
         >
           {data?.pages
             .flatMap((page) => page.messages)
@@ -102,6 +100,12 @@ export default function PrivateChat({
               );
             })}
         </InfiniteScroll>
+
+        {isFetchingNextPage && (
+          <div className="p-4 self-center">
+            <Spinner />
+          </div>
+        )}
       </div>
 
       <div className="flex items-center rounded-md border border-gray-300 p-4 mx-4 mb-4 bg-white">
