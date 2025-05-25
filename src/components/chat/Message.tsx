@@ -26,7 +26,7 @@ export function Message(props: Props) {
         className="flex items-baseline space-x-4 px-4 hover:bg-white rounded"
       >
         <span className="text-[0.8rem] w-12">
-          {isHovering ? formatMessageTime(new Date(createdAt)) : null}
+          {isHovering ? formatMessageTime(new Date(createdAt), true) : null}
         </span>
 
         <p className="break-all whitespace-pre-line">{message}</p>

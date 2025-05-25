@@ -20,7 +20,11 @@ function createMinioImageUrl(imageSrc: string) {
   return `${process.env.NEXT_PUBLIC_MINIO_CLIENT_URL}/${imageSrc}`;
 }
 
-function formatMessageTime(date: Date): string {
+function formatMessageTime(date: Date, short = false): string {
+  if (short) {
+    return format(date, "h:mm a");
+  }
+
   if (isToday(date)) {
     return format(date, "h:mm a");
   }
