@@ -27,6 +27,7 @@
     "drizzle-orm": "^0.42.0",
     "ioredis": "^5.6.1",
     "lucide-react": "^0.503.0",
+    "mediasoup": "^3.15.8",
     "minio": "^8.0.5",
     "next": "15.3.1-canary.15",
     "pg": "^8.14.1",
