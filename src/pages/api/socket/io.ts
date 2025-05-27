@@ -8,6 +8,8 @@ import { eq } from "drizzle-orm";
 import { UserTable } from "@/drizzle/schema";
 import { deleteUser, insertUser } from "@/features/auth/db/redis/user";
 
+import CallListeners from "@/features/calls/websocket/listeners/server/call";
+
 export const config = {
   api: {
     bodyParser: false,
@@ -87,8 +89,10 @@ function ioHandler(req: NextApiRequest, res: NextApiResponseServerIO) {
       });
 
       const channelListeners = new ChannelListeners(io, socket);
+      const callListeners = new CallListeners(io, socket);
 
       channelListeners.registerListeners();
+      callListeners.registerListeners();
     });
 
     res.socket.server.io = io;
