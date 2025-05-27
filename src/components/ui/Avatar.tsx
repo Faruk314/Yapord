@@ -13,7 +13,7 @@ export default function Avatar({ imageSrc, className, name }: AvatarProps) {
     <span
       className={cn(
         "relative w-12 h-12 rounded-full overflow-hidden",
-        "text-white font-black uppercase bg-pink-600 shadow-md",
+        "text-white text-xl font-black uppercase bg-pink-600 shadow-md",
         "flex items-center justify-center",
         className
       )}
@@ -26,7 +26,7 @@ export default function Avatar({ imageSrc, className, name }: AvatarProps) {
           className="bg-white"
         />
       ) : (
-        <span className="text-xl z-10">{name?.slice(0, 1)}</span>
+        <span className="z-10">{name?.slice(0, 1)}</span>
       )}
     </span>
   );
