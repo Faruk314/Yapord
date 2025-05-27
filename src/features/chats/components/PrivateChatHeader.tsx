@@ -5,9 +5,9 @@ import Avatar from "@/components/ui/Avatar";
 import { useSocket } from "@/context/socketContext";
 import { Iuser } from "@/features/auth/types/user";
 import PrivateCall from "@/features/calls/component/modals/PrivateCall";
-import { emitUserCall } from "@/features/calls/websocket/emiters/call";
 import { Phone, Video } from "lucide-react";
 import { useChatCallStore } from "../store /ChatCalls";
+import { useCallEmiters } from "@/features/calls/websocket/emiters/call";
 
 interface Props {
   chatId: string;
@@ -21,13 +21,14 @@ export default function PrivateChatHeader({
   recipientInfo,
 }: Props) {
   const { socket } = useSocket();
+  const { emitUserCall } = useCallEmiters();
   const callModalOpen = useChatCallStore((state) => state.callModalOpen);
   const openChatCallModal = useChatCallStore((state) => state.openCallModal);
 
   function handleCall() {
     if (!socket) return;
 
-    emitUserCall(socket, { channelId: chatId, recipientId: recipientInfo.id });
+    emitUserCall({ channelId: chatId, recipientId: recipientInfo.id });
 
     openChatCallModal();
   }

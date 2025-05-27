@@ -7,10 +7,10 @@ import { DialogTitle } from "@radix-ui/react-dialog";
 import Avatar from "@/components/ui/Avatar";
 import { IconBtn } from "@/components/buttons/IconBtn";
 import { PhoneCall, PhoneOff } from "lucide-react";
-import { emitCallDecline } from "../../websocket/emiters/call";
 import { useSocket } from "@/context/socketContext";
 import { useRouter } from "next/navigation";
 import { useChatCallStore } from "@/features/chats/store /ChatCalls";
+import { useCallEmiters } from "../../websocket/emiters/call";
 
 export default function IncomingCall() {
   const { channelId, senderInfo } = useCallStore(
@@ -20,6 +20,7 @@ export default function IncomingCall() {
   const closeIncomingCallModal = useCallStore((state) => state.closeCallModal);
   const incomingCallModalOpen = useCallStore((state) => state.callModalOpen);
   const openChatCallModal = useChatCallStore((state) => state.openCallModal);
+  const { emitCallDecline } = useCallEmiters();
   const { socket } = useSocket();
   const router = useRouter();
 
@@ -34,7 +35,7 @@ export default function IncomingCall() {
   const handleDecline = () => {
     if (!socket || !senderInfo.id) return;
 
-    emitCallDecline(socket, { callerId: senderInfo.id });
+    emitCallDecline({ callerId: senderInfo.id });
 
     closeIncomingCallModal();
   };
