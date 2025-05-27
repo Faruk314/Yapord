@@ -1,3 +1,4 @@
+import { GlobalSocketListener } from "@/components/GlobalSocketListeners";
 import { getCurrentUser } from "@/features/auth/actions/user";
 import UserSettingsFooter from "@/features/auth/components/UserSettingsFooter";
 import ServerList from "@/features/servers/components/ServerList";
@@ -18,6 +19,8 @@ export default async function layout({
   return (
     <main className="grid grid-cols-[auto_1fr] lg:grid-cols-[auto_auto_1fr] min-h-screen">
       <SideBar />
+      <GlobalSocketListener />
+
       <>{children}</>
 
       <UserSettingsFooter user={user} />
