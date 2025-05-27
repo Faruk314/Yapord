@@ -3,15 +3,15 @@ import { create } from "zustand";
 
 type CallState = {
   callModalOpen: boolean;
-  incomingCallInfo: Iuser | null;
+  incomingCallInfo: { channelId: string; senderInfo: Iuser } | undefined;
   openCallModal: () => void;
   closeCallModal: () => void;
-  setIncomingCallInfo: (data: Iuser) => void;
+  setIncomingCallInfo: (data: { channelId: string; senderInfo: Iuser }) => void;
 };
 
 export const useCallStore = create<CallState>((set) => ({
   callModalOpen: false,
-  incomingCallInfo: null,
+  incomingCallInfo: undefined,
 
   openCallModal: () => set({ callModalOpen: true }),
 
