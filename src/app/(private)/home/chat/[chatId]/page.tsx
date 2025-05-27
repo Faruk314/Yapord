@@ -1,12 +1,10 @@
-import { IconBtn } from "@/components/buttons/IconBtn";
-import Avatar from "@/components/ui/Avatar";
 import { getCurrentUser } from "@/features/auth/actions/user";
 import PrivateChat from "@/features/chats/components/PrivateChat";
+import PrivateChatHeader from "@/features/chats/components/PrivateChatHeader";
 import { getChatMessages } from "@/features/chats/db/chatMessages";
 import { getChatParticipant } from "@/features/chats/db/chatParticipants";
 import { getQueryClient } from "@/providers/get-query-client";
 import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
-import { Phone, Video } from "lucide-react";
 import { redirect } from "next/navigation";
 import React from "react";
 
@@ -37,21 +35,11 @@ export default async function PrivateChatPage({
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <div className="flex flex-col h-screen">
-        <div className="flex items-center justify-between h-18 px-4 border-b border-gray-300">
-          <div className="flex items-center space-x-4 ">
-            <Avatar
-              className="h-9 w-9"
-              name={recipientInfo.name}
-              imageSrc={recipientInfo.image}
-            />
-            <span className="text-xl font-semibold">{recipientInfo.name}</span>
-          </div>
-
-          <div className="flex items-center space-x-4">
-            <IconBtn className="h-9 w-9" icon={<Phone />} />
-            <IconBtn className="h-9 w-9" icon={<Video />} />
-          </div>
-        </div>
+        <PrivateChatHeader
+          chatId={chatId}
+          userInfo={user}
+          recipientInfo={recipientInfo}
+        />
 
         <PrivateChat
           chatId={chatId}
