@@ -20,11 +20,13 @@ export default function IncomingCall() {
   const closeIncomingCallModal = useCallStore((state) => state.closeCallModal);
   const incomingCallModalOpen = useCallStore((state) => state.callModalOpen);
   const openChatCallModal = useChatCallStore((state) => state.openCallModal);
-  const { emitCallDecline } = useCallEmiters();
+  const { emitCallDecline, emitCallAccept } = useCallEmiters();
   const { socket } = useSocket();
   const router = useRouter();
 
   const handleAccept = () => {
+    emitCallAccept({ channelId });
+
     router.push(`/home/chat/${channelId}`);
 
     closeIncomingCallModal();
