@@ -13,8 +13,8 @@ export function useCallEmiters() {
     socket?.emit("callDecline", data);
   }
 
-  function emitCallAccept() {
-    socket?.emit("callAccept");
+  function emitCallAccept(data: { channelId: string }) {
+    socket?.emit("callAccept", data);
   }
 
   return {
