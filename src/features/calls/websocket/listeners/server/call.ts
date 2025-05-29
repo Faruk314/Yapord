@@ -13,6 +13,7 @@ class CallListeners {
   registerListeners() {
     this.socket.on("callUser", this.onCallUser.bind(this));
     this.socket.on("callDecline", this.onCallDecline.bind(this));
+    this.socket.on("callAccept", this.onCallAccept.bind(this));
   }
 
   async onCallUser({
@@ -25,6 +26,8 @@ class CallListeners {
     const recipient = await getUser(recipientId);
 
     if (!recipient) return console.error("Recipient not found");
+
+    this.socket.join(channelId);
 
     this.socket
       .to(recipient?.socketId)
@@ -39,7 +42,11 @@ class CallListeners {
     this.socket.to(caller?.socketId).emit("callDeclined");
   }
 
-  async onCallAccept() {}
+  async onCallAccept({ channelId }: { channelId: string }) {
+    this.socket.join(channelId);
+
+    this.io.to(channelId).emit("callAccepted", { channelId });
+  }
 }
 
 export default CallListeners;
