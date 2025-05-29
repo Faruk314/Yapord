@@ -9,6 +9,8 @@ import { UserTable } from "@/drizzle/schema";
 import { deleteUser, insertUser } from "@/features/auth/db/redis/user";
 
 import CallListeners from "@/features/calls/websocket/listeners/server/call";
+import { initMediasoupWorker } from "@/mediasoup/mediasoup";
+import MediasoupListeners from "@/features/calls/websocket/listeners/server/mediasoup";
 
 export const config = {
   api: {
@@ -88,11 +90,15 @@ function ioHandler(req: NextApiRequest, res: NextApiResponseServerIO) {
         channelId: null,
       });
 
+      await initMediasoupWorker();
+
       const channelListeners = new ChannelListeners(io, socket);
       const callListeners = new CallListeners(io, socket);
+      const mediasoupListeners = new MediasoupListeners(io, socket);
 
       channelListeners.registerListeners();
       callListeners.registerListeners();
+      mediasoupListeners.registerListeners();
     });
 
     res.socket.server.io = io;
