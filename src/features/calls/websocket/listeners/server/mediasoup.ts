@@ -48,8 +48,6 @@ class MediasoupListeners {
       recv: recvTransport,
     });
 
-    console.log("transport created");
-
     this.socket.emit("transportCreated", {
       sendTransportData: {
         id: sendTransport.id,
