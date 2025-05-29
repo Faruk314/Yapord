@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 export default function MainPage() {
-  redirect("/server");
+  redirect("/home");
 
   return <section className="">HELLO</section>;
 }
