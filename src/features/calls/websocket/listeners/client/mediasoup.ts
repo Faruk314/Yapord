@@ -6,9 +6,12 @@ import { useMediasoupHandlers } from "../../handlers/mediasoup";
 
 export const useMediasoupEvents = () => {
   const { socket } = useSocket();
-  const { onRtpCapabilities, onTransportCreated } = useMediasoupHandlers();
+  const { onRtpCapabilities, onTransportCreated, onNewProducer } =
+    useMediasoupHandlers();
 
   useSocketEvent(socket, "rtpCapabilities", onRtpCapabilities);
 
   useSocketEvent(socket, "transportCreated", onTransportCreated);
+
+  useSocketEvent(socket, "newProducer", onNewProducer);
 };
