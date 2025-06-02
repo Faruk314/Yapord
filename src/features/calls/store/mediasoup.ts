@@ -7,9 +7,12 @@ type MediasoupState = {
   sendTransport: types.Transport | null;
   recvTransport: types.Transport | null;
   consumers: Map<string, Consumer>;
+  localStream: MediaStream | null;
   setDevice: (device: Device) => void;
   setSendTransport: (transport: types.Transport) => void;
   setRecvTransport: (transport: types.Transport) => void;
+  setLocalStream: (stream: MediaStream) => void;
+
   resetMediasoupState: () => void;
   addConsumer: (id: string, consumer: Consumer) => void;
   removeConsumer: (id: string) => void;
@@ -21,10 +24,13 @@ export const useMediasoupStore = create<MediasoupState>((set) => ({
   sendTransport: null,
   recvTransport: null,
   consumers: new Map(),
+  localStream: null,
 
   setDevice: (device) => set({ device }),
   setSendTransport: (sendTransport) => set({ sendTransport }),
   setRecvTransport: (recvTransport) => set({ recvTransport }),
+  setLocalStream: (stream) => set({ localStream: stream }),
+
   resetMediasoupState: () =>
     set({
       device: null,

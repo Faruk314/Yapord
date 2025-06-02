@@ -22,6 +22,7 @@ export function useMediasoupHandlers() {
   const clientRecvTransport = useMediasoupStore((state) => state.recvTransport);
   const addConsumer = useMediasoupStore((state) => state.addConsumer);
   const removeConsumer = useMediasoupStore((state) => state.removeConsumer);
+  const setLocalStream = useMediasoupStore((state) => state.setLocalStream);
 
   async function onRtpCapabilities({
     channelId,
@@ -92,8 +93,10 @@ export function useMediasoupHandlers() {
 
     const stream = await navigator.mediaDevices.getUserMedia({
       audio: true,
-      video: false,
+      video: true,
     });
+
+    setLocalStream(stream);
 
     const audioTrack = stream.getAudioTracks()[0];
 
@@ -129,8 +132,16 @@ export function useMediasoupHandlers() {
       }
     );
 
-    const audio = await clientSendTransport.produce({
-      track: audioTrack,
+    const videoTrack = stream.getVideoTracks()[0];
+
+    await clientSendTransport.produce({
+      track: videoTrack,
+
+      encodings: [
+        { rid: "r0", maxBitrate: 100000, scaleResolutionDownBy: 4 },
+        { rid: "r1", maxBitrate: 300000, scaleResolutionDownBy: 2 },
+        { rid: "r2", maxBitrate: 900000, scaleResolutionDownBy: 1 },
+      ],
     });
   }
 
