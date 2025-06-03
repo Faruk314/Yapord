@@ -2,10 +2,11 @@
 
 import { Device, types } from "mediasoup-client";
 import { useMediasoupEmiters } from "../emiters/mediasoup";
-import { Itransport, ProducerAppData } from "../../types/mediasoup";
+import { Iconsumer, Itransport, ProducerAppData } from "../../types/mediasoup";
 import { useMediasoupStore } from "../../store/mediasoup";
 import { getCurrentUser } from "@/features/auth/actions/user";
-import { Consumer } from "mediasoup-client/types";
+
+import { Iuser } from "@/features/auth/types/user";
 
 export function useMediasoupHandlers() {
   const {
@@ -177,12 +178,12 @@ export function useMediasoupHandlers() {
     };
 
     emitCreateConsumer(consumerData, async (consumerInfo) => {
-      const consumer: Consumer = await clientRecvTransport.consume({
+      const consumer: Iconsumer = await clientRecvTransport.consume({
         id: consumerInfo.id,
         producerId: consumerInfo.producerId,
         kind: consumerInfo.kind,
         rtpParameters: consumerInfo.rtpParameters,
-        appData: consumerInfo.appData,
+        appData: consumerInfo.appData as { user: Iuser },
       });
 
       console.log(consumer, "consumer");

@@ -1,20 +1,19 @@
 import { create } from "zustand";
 import { Device, types } from "mediasoup-client";
-import { Consumer } from "mediasoup-client/types";
+import { Iconsumer } from "../types/mediasoup";
 
 type MediasoupState = {
   device: Device | null;
   sendTransport: types.Transport | null;
   recvTransport: types.Transport | null;
-  consumers: Map<string, Consumer>;
+  consumers: Map<string, Iconsumer>;
   localStream: MediaStream | null;
   setDevice: (device: Device) => void;
   setSendTransport: (transport: types.Transport) => void;
   setRecvTransport: (transport: types.Transport) => void;
   setLocalStream: (stream: MediaStream) => void;
-
   resetMediasoupState: () => void;
-  addConsumer: (id: string, consumer: Consumer) => void;
+  addConsumer: (id: string, consumer: Iconsumer) => void;
   removeConsumer: (id: string) => void;
   clearConsumers: () => void;
 };

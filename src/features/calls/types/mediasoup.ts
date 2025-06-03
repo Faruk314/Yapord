@@ -19,14 +19,8 @@ interface ProducerAppData extends types.AppData {
   mediaTag?: string;
 }
 
-interface Iconsumer {
-  id: string;
-  producerId: string;
-  kind: types.MediaKind;
-  rtpParameters: types.RtpParameters;
-  type: types.Consumer;
-  producerPaused: boolean;
-  appData?: types.AppData;
+interface Iconsumer extends types.Consumer {
+  appData: { user: Iuser };
 }
 
 type ConnectTransportCallback = (response?: { error: string } | null) => void;
