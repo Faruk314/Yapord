@@ -18,7 +18,7 @@ export const config = {
   },
 };
 
-function ioHandler(req: NextApiRequest, res: NextApiResponseServerIO) {
+async function ioHandler(req: NextApiRequest, res: NextApiResponseServerIO) {
   if (!res.socket.server.io) {
     const path = "/api/socket/io";
 
@@ -32,6 +32,8 @@ function ioHandler(req: NextApiRequest, res: NextApiResponseServerIO) {
         credentials: true,
       },
     });
+
+    await initMediasoupWorker();
 
     io.use(async (socket: Socket, next) => {
       const cookieHeader = socket.request.headers.cookie;
@@ -89,8 +91,6 @@ function ioHandler(req: NextApiRequest, res: NextApiResponseServerIO) {
         socketId: socket.id,
         channelId: null,
       });
-
-      await initMediasoupWorker();
 
       const channelListeners = new ChannelListeners(io, socket);
       const callListeners = new CallListeners(io, socket);
