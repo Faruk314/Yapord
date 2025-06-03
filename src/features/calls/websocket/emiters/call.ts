@@ -9,7 +9,7 @@ export function useCallEmiters() {
     socket?.emit("callUser", data);
   }
 
-  function emitCallDecline(data: { callerId: string }) {
+  function emitCallDecline(data: { channelId: string; callerId: string }) {
     socket?.emit("callDecline", data);
   }
 

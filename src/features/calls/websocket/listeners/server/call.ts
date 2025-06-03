@@ -1,4 +1,8 @@
 import { getUser } from "@/features/auth/db/redis/user";
+import {
+  addChannelMember,
+  removeChannelMember,
+} from "@/features/channels/db/redis/channelRooms";
 import { Server, Socket } from "socket.io";
 
 class CallListeners {
@@ -17,11 +21,11 @@ class CallListeners {
   }
 
   async onCallUser({
-    recipientId,
     channelId,
+    recipientId,
   }: {
-    recipientId: string;
     channelId: string;
+    recipientId: string;
   }) {
     const recipient = await getUser(recipientId);
 
@@ -29,21 +33,35 @@ class CallListeners {
 
     this.socket.join(channelId);
 
+    await addChannelMember(channelId, this.socket.user.id);
+
     this.socket
       .to(recipient?.socketId)
       .emit("incomingCall", { channelId, senderInfo: this.socket.user });
   }
 
-  async onCallDecline({ callerId }: { callerId: string }) {
-    const caller = await getUser(callerId);
+  async onCallDecline({
+    channelId,
+    callerId,
+  }: {
+    channelId: string;
+    callerId: string;
+  }) {
+    const removedMember = await removeChannelMember(channelId, callerId);
 
-    if (!caller) return console.error("Caller not found");
+    if (!removedMember) return;
 
-    this.socket.to(caller?.socketId).emit("callDeclined");
+    console.log(removedMember, "removed member");
+
+    this.socket.leave(channelId);
+
+    this.socket.to(removedMember.socketId).emit("callDeclined");
   }
 
   async onCallAccept({ channelId }: { channelId: string }) {
     this.socket.join(channelId);
+
+    await addChannelMember(channelId, this.socket.user.id);
 
     this.io.to(channelId).emit("callAccepted", { channelId });
   }
