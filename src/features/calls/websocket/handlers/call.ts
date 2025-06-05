@@ -4,6 +4,7 @@ import { Iuser } from "@/features/auth/types/user";
 import { useCallStore } from "../../store/call";
 import { useChatCallStore } from "@/features/chats/store /ChatCalls";
 import { useMediasoupEmiters } from "../emiters/mediasoup";
+import { useCallback } from "react";
 
 export function useCallHandlers() {
   const { emitGetRtpCapabilities } = useMediasoupEmiters();
@@ -13,18 +14,24 @@ export function useCallHandlers() {
     (state) => state.setIncomingCallInfo
   );
 
-  function onIncomingCall(data: { channelId: string; senderInfo: Iuser }) {
-    setIncomingCallInfo(data);
-    openCallModal();
-  }
+  const onIncomingCall = useCallback(
+    (data: { channelId: string; senderInfo: Iuser }) => {
+      setIncomingCallInfo(data);
+      openCallModal();
+    },
+    [setIncomingCallInfo, openCallModal]
+  );
 
-  function onCallDeclined() {
+  const onCallDeclined = useCallback(() => {
     closeChatCallModal();
-  }
+  }, [closeChatCallModal]);
 
-  function onCallAccepted(data: { channelId: string }) {
-    emitGetRtpCapabilities(data);
-  }
+  const onCallAccepted = useCallback(
+    (data: { channelId: string }) => {
+      emitGetRtpCapabilities(data);
+    },
+    [emitGetRtpCapabilities]
+  );
 
   return {
     onIncomingCall,
