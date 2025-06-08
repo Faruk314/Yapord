@@ -4,7 +4,7 @@ import { getCurrentUser } from "@/features/auth/actions/user";
 import { createChatKey } from "../utils/chats";
 import { getChatByKey, insertChat as insertChatDb } from "../db/chats";
 import { redirect } from "next/navigation";
-import { db } from "@/drizzle/db";
+import { db } from "@shared/drizzle/db";
 import { insertChatParticipants } from "../db/chatParticipants";
 import { Ichat } from "../types/chats";
 

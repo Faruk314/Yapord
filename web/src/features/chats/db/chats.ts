@@ -1,5 +1,5 @@
-import { db } from "@/drizzle/db";
-import { ChatTable } from "@/drizzle/schema";
+import { db } from "@shared/drizzle/db";
+import { ChatTable } from "@shared/drizzle/schema";
 import { eq } from "drizzle-orm";
 
 async function getChatByKey(chatKey: string) {

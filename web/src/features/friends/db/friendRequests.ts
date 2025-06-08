@@ -1,5 +1,5 @@
-import { db } from "@/drizzle/db";
-import { FriendTable, UserTable } from "@/drizzle/schema";
+import { db } from "@shared/drizzle/db";
+import { FriendTable, UserTable } from "@shared/drizzle/schema";
 import {
   getFriendRequestUserTag,
   revalidateFriendRequestsCache,

@@ -1,6 +1,6 @@
-import { db } from "@/drizzle/db";
+import { db } from "@shared/drizzle/db";
 import { revalidateChannelMessageCache } from "../cache/channelMessages";
-import { ChannelMessageTable } from "@/drizzle/schema";
+import { ChannelMessageTable } from "@shared/drizzle/schema";
 
 async function insertChannelMessage(
   data: typeof ChannelMessageTable.$inferInsert

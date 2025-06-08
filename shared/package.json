@@ -1,0 +1,15 @@
+{
+  "name": "@yapord/shared",
+  "version": "1.0.0",
+  "main": "index.ts",
+   "scripts": {
+    "migrate:generate": "drizzle-kit generate --config ./drizzle.config.ts",
+    "migrate:push": "drizzle-kit push --config ./drizzle.config.ts"
+  },
+  "dependencies": {
+    "@t3-oss/env-core": "^0.13.6",
+    "drizzle-kit": "^0.31.1",
+    "drizzle-orm": "^0.44.2",
+    "zod": "^3.25.56"
+  }
+}

@@ -1,7 +1,7 @@
 "use server";
 
-import { ServerTable } from "@/drizzle/schema";
-import { db } from "@/drizzle/db";
+import { ServerTable } from "@shared/drizzle/schema";
+import { db } from "@shared/drizzle/db";
 import { cacheTag } from "next/dist/server/use-cache/cache-tag";
 import {
   getServerGlobalTag,

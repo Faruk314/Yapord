@@ -3,8 +3,8 @@
 import { z } from "zod";
 import { redirect } from "next/navigation";
 import { signInSchema, signUpSchema } from "../schemas/auth";
-import { db } from "@/drizzle/db";
-import { UserTable } from "@/drizzle/schema";
+import { db } from "@shared/drizzle/db";
+import { UserTable } from "@shared/drizzle/schema";
 import { eq } from "drizzle-orm";
 import { createUserSession, removeUserFromSession } from "../db/session";
 import { insertUser } from "../db/user";

@@ -1,5 +1,5 @@
-import { db } from "@/drizzle/db";
-import { ChatParticipantsTable } from "@/drizzle/schema";
+import { db } from "@shared/drizzle/db";
+import { ChatParticipantsTable } from "@shared/drizzle/schema";
 import { eq, ne } from "drizzle-orm";
 
 export async function getChatParticipant(chatId: string, userId: string) {

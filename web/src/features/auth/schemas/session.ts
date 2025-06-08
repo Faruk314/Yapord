@@ -1,4 +1,4 @@
-import { userRoles } from "@/drizzle/schema";
+import { userRoles } from "@shared/drizzle/schema";
 import { z } from "zod";
 
 export const sessionSchema = z.object({

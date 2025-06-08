@@ -1,6 +1,6 @@
 "use server";
 
-import { db } from "@/drizzle/db";
+import { db } from "@shared/drizzle/db";
 import { deleteServerImage } from "../../servers/db/servers";
 import { deleteImagesFromMinio } from "../db/images";
 

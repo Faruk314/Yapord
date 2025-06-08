@@ -13,7 +13,7 @@ import { AlertDialogBox } from "@/components/modals/AlertDialog";
 import { deleteServer } from "../actions/servers";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { ServerRole } from "@/drizzle/schema";
+import { ServerRole } from "@shared/drizzle/schema";
 import { useEffect, useState } from "react";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import { HiX } from "react-icons/hi";

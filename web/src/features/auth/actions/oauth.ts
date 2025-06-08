@@ -1,6 +1,6 @@
 "use server";
 
-import { OAuthProvider } from "@/drizzle/schema";
+import { OAuthProvider } from "@shared/drizzle/schema";
 import { redirect } from "next/navigation";
 import { OAuthClient } from "../classes/oauth";
 import { env } from "@/data/env/server";

@@ -1,4 +1,4 @@
-import { ServerRole } from "@/drizzle/schema";
+import { ServerRole } from "@shared/drizzle/schema";
 
 function canCreateChannels(user: { role: ServerRole } | null) {
   return user?.role === "admin" || user?.role === "owner";

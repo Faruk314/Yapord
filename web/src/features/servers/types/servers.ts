@@ -1,4 +1,4 @@
-import { ServerRole } from "@/drizzle/schema";
+import { ServerRole } from "@shared/drizzle/schema";
 
 interface Server {
   id: string;

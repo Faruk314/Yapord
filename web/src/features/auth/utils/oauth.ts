@@ -1,4 +1,4 @@
-import { OAuthProvider } from "@/drizzle/schema";
+import { OAuthProvider } from "@shared/drizzle/schema";
 import {
   createDiscordOAuthClient,
   createGithubOAuthClient,

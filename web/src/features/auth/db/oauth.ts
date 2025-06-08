@@ -1,9 +1,9 @@
-import { db } from "@/drizzle/db";
+import { db } from "@shared/drizzle/db";
 import {
   OAuthProvider,
   UserOAuthAccountTable,
   UserTable,
-} from "@/drizzle/schema";
+} from "@shared/drizzle/schema";
 import { eq } from "drizzle-orm";
 
 async function connectUserToAccount(

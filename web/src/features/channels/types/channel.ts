@@ -1,4 +1,4 @@
-import { ChannelType } from "@/drizzle/schema";
+import { ChannelType } from "@shared/drizzle/schema";
 import { IserverMember } from "@/features/servers/types/servers";
 
 interface Ichannel {

@@ -1,4 +1,4 @@
-import { ChatType } from "@/drizzle/schema";
+import { ChatType } from "@shared/drizzle/schema";
 
 interface Ichat {
   name: string | null;

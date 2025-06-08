@@ -10,7 +10,7 @@ import { z } from "zod";
 import { createUniqueFileNames } from "@/lib/utils";
 import { uploadImagesToMinio } from "@/features/images/db/images";
 import { updateUser as updateUserDb } from "../db/user";
-import { db } from "@/drizzle/db";
+import { db } from "@shared/drizzle/db";
 
 type FullUser = Exclude<Awaited<ReturnType<typeof getUser>>, undefined | null>;
 

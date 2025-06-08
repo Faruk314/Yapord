@@ -1,4 +1,4 @@
-import { serverRoles } from "@/drizzle/schema/serverMember";
+import { serverRoles } from "@shared/drizzle/schema/serverMember";
 import { z } from "zod";
 
 export const serverMemberSchema = z.object({

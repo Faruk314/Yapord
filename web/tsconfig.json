@@ -22,18 +22,22 @@
         "name": "next"
       }
     ],
+    "baseUrl": ".",
     "paths": {
       "@/*": [
         "./src/*"
+      ],
+      "@shared/*": [
+        "../shared/*"
       ]
     }
   },
   "include": [
     "**/*.ts",
     "**/*.tsx",
+    "../shared/**/*",
     "next-env.d.ts",
     "src/**/*",
-    "websocket/**/*",
     ".next/types/**/*.ts"
   ],
   "exclude": [

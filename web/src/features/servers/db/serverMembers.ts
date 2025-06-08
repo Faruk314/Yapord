@@ -1,5 +1,5 @@
-import { ServerMemberTable, UserTable } from "@/drizzle/schema";
-import { db } from "@/drizzle/db";
+import { ServerMemberTable, UserTable } from "@shared/drizzle/schema";
+import { db } from "@shared/drizzle/db";
 import { eq } from "drizzle-orm";
 import { cacheTag } from "next/dist/server/use-cache/cache-tag";
 import {

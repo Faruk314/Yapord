@@ -9,7 +9,7 @@ import { z } from "zod";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { createChannel } from "../actions/channels";
-import { ChannelType } from "@/drizzle/schema";
+import { ChannelType } from "@shared/drizzle/schema";
 
 interface Props {
   serverId: string;

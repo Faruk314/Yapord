@@ -1,7 +1,7 @@
 "use server";
 
-import { db } from "@/drizzle/db";
-import { ChatMessagesTable } from "@/drizzle/schema";
+import { db } from "@shared/drizzle/db";
+import { ChatMessagesTable } from "@shared/drizzle/schema";
 import { eq, asc } from "drizzle-orm";
 
 async function getChatMessages(chatId: string, page = 0) {

@@ -1,5 +1,5 @@
-import { db } from "@/drizzle/db";
-import { ChannelTable } from "@/drizzle/schema";
+import { db } from "@shared/drizzle/db";
+import { ChannelTable } from "@shared/drizzle/schema";
 import {
   getChannelIdTag,
   getChannelServerTag,

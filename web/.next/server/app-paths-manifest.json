@@ -1,1 +1,4 @@
-{}
+{
+  "/(private)/home/page": "app/(private)/home/page.js",
+  "/(private)/home/friends/page": "app/(private)/home/friends/page.js"
+}

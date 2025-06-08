@@ -1,4 +1,4 @@
-import { oAuthProviders } from "@/drizzle/schema";
+import { oAuthProviders } from "@shared/drizzle/schema";
 import { NextRequest } from "next/server";
 import { redirect } from "next/navigation";
 import { z } from "zod";

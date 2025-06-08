@@ -1,4 +1,4 @@
-import { ChannelType } from "@/drizzle/schema";
+import { ChannelType } from "@shared/drizzle/schema";
 import { getUser, insertUser } from "@/features/auth/db/redis/user";
 import { redisClient } from "@/redis/redis";
 

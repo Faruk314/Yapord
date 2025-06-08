@@ -12,7 +12,7 @@ import {
   deleteServer as deleteServerDB,
   updateServer as updateServerDb,
 } from "../db/servers";
-import { db } from "@/drizzle/db";
+import { db } from "@shared/drizzle/db";
 import { createUniqueFileNames } from "@/lib/utils";
 import { insertServerMember } from "../db/serverMembers";
 import { getCurrentServerMember } from "./serverMembers";

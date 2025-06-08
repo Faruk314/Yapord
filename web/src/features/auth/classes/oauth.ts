@@ -1,7 +1,7 @@
 import { env } from "@/data/env/server";
 import { z } from "zod";
 import crypto from "crypto";
-import { OAuthProvider } from "@/drizzle/schema";
+import { OAuthProvider } from "@shared/drizzle/schema";
 import {
   InvalidStateError,
   InvalidTokenError,
