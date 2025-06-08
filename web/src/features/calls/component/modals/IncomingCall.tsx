@@ -37,7 +37,7 @@ export default function IncomingCall() {
   const handleDecline = () => {
     if (!socket || !senderInfo.id) return;
 
-    emitCallDecline({ callerId: senderInfo.id });
+    emitCallDecline({ channelId, callerId: senderInfo.id });
 
     closeIncomingCallModal();
   };

@@ -51,7 +51,7 @@ async function addChannelMember(channelId: string, userId: string) {
 async function removeChannelMember(channelId: string, userId: string) {
   await redisClient.srem(`${ROOMS_KEY}:${channelId}:members`, userId);
 
-  let user = await getUser(userId);
+  const user = await getUser(userId);
 
   if (user && user.channelId === channelId) {
     user.channelId = null;

@@ -5,11 +5,9 @@ import {
   createContext,
   useContext,
   useEffect,
-  useRef,
   useState,
 } from "react";
 import { Socket, io as clientIO } from "socket.io-client";
-import { env } from "@/data/env/client";
 
 type SocketContextType = {
   socket: Socket | null;
@@ -26,23 +24,27 @@ export function useSocket() {
 }
 
 export function SocketProvider({ children }: { children: ReactNode }) {
-  const socketRef = useRef<Socket | null>(null);
+  const [socket, setSocket] = useState<Socket | null>(null);
   const [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
-    const socketInstance = clientIO(env.NEXT_PUBLIC_SITE_URL, {
-      path: "/api/socket/io",
-      addTrailingSlash: false,
+    const SERVER_URL = "http://localhost:3001";
+    const SOCKET_PATH = "/ws";
+
+    const socketInstance = clientIO(SERVER_URL, {
+      path: SOCKET_PATH,
       withCredentials: true,
     });
 
     socketInstance.on("connect", () => setIsConnected(true));
+
     socketInstance.on("disconnect", () => setIsConnected(false));
+
     socketInstance.on("connect_error", (err) =>
       console.error("Connection Error:", err.message)
     );
 
-    socketRef.current = socketInstance;
+    setSocket(socketInstance);
 
     return () => {
       socketInstance.disconnect();
@@ -50,7 +52,7 @@ export function SocketProvider({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-    <socketContext.Provider value={{ socket: socketRef.current, isConnected }}>
+    <socketContext.Provider value={{ socket, isConnected }}>
       {children}
     </socketContext.Provider>
   );

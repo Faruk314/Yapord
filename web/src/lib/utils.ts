@@ -32,4 +32,8 @@ function formatMessageTime(date: Date, short = false): string {
   return format(date, "MMMM d 'at' h:mm a");
 }
 
+export function test() {
+  console.log("hej this is test");
+}
+
 export { cn, createUniqueFileNames, createMinioImageUrl, formatMessageTime };
