@@ -1,6 +1,4 @@
-import { db } from "@shared/drizzle/db";
-import { ChatParticipantsTable } from "@shared/drizzle/schema";
-import { eq, ne } from "drizzle-orm";
+import { db, ChatParticipantsTable, eq, ne } from "@shared/drizzle";
 
 export async function getChatParticipant(chatId: string, userId: string) {
   const participant = await db.query.ChatParticipantsTable.findFirst({

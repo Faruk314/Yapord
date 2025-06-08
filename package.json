@@ -1,0 +1,10 @@
+{
+  "name": "yapord-monorepo",
+  "private": true,
+  "version": "1.0.0",
+  "pnpm": {
+    "overrides": {
+      "pg-cloudflare": "npm:none"
+    }
+  }
+}

@@ -1,10 +1,8 @@
-import { db } from "@shared/drizzle/db";
-import { FriendTable, UserTable } from "@shared/drizzle/schema";
 import {
   getFriendRequestUserTag,
   revalidateFriendRequestsCache,
 } from "../cache/friendRequests";
-import { and, eq, or } from "drizzle-orm";
+import { db, and, eq, or, FriendTable, UserTable } from "@shared/drizzle";
 import { cacheTag } from "next/dist/server/use-cache/cache-tag";
 
 async function getFriendRequests(recipientId: string) {

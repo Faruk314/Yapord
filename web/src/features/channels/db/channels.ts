@@ -1,11 +1,9 @@
-import { db } from "@shared/drizzle/db";
-import { ChannelTable } from "@shared/drizzle/schema";
 import {
   getChannelIdTag,
   getChannelServerTag,
   revalidateChannelCache,
 } from "../cache/channels";
-import { eq } from "drizzle-orm";
+import { db, eq, ChannelTable } from "@shared/drizzle";
 import { cacheTag } from "next/dist/server/use-cache/cache-tag";
 import { getChannelMessagesChannelTag } from "../cache/channelMessages";
 import { populateChannelsWithMembers } from "./redis/channelRooms";

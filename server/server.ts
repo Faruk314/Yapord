@@ -112,7 +112,6 @@
 import * as http from "http";
 import { Server as SocketIOServer } from "socket.io";
 import { sayHello } from "./methods";
-import { test } from "@/lib/utils";
 
 // Create a simple HTTP server (no request handling needed here)
 const httpServer = http.createServer();
@@ -145,5 +144,4 @@ io.on("connection", (socket) => {
 httpServer.listen(3001, () => {
   console.log("Server listening on http://localhost:3001");
   console.log(sayHello());
-  console.log(test());
 });

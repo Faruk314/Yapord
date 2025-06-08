@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import path from "path";
 
 const nextConfig: NextConfig = {
   experimental: {
@@ -8,6 +9,7 @@ const nextConfig: NextConfig = {
     serverActions: {
       bodySizeLimit: "10mb",
     },
+    externalDir: true,
   },
 
   images: {
@@ -19,6 +21,15 @@ const nextConfig: NextConfig = {
         pathname: "/yapord/**",
       },
     ],
+  },
+
+  webpack(config) {
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      "@shared": path.resolve(__dirname, "../shared"),
+    };
+
+    return config;
   },
 };
 

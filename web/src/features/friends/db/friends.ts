@@ -1,8 +1,6 @@
 import { cacheTag } from "next/dist/server/use-cache/cache-tag";
 import { getFriendRequestUserTag } from "../cache/friendRequests";
-import { db } from "@shared/drizzle/db";
-import { and, eq, or, ne } from "drizzle-orm";
-import { FriendTable, UserTable } from "@shared/drizzle/schema";
+import { db, and, eq, or, ne, FriendTable, UserTable } from "@shared/drizzle";
 
 async function getFriends(userId: string) {
   "use cache";

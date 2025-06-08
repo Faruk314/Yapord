@@ -1,14 +1,12 @@
 "use server";
 
-import { ServerTable } from "@shared/drizzle/schema";
-import { db } from "@shared/drizzle/db";
 import { cacheTag } from "next/dist/server/use-cache/cache-tag";
 import {
   getServerGlobalTag,
   getServerIdTag,
   revalidateServerCache,
 } from "../cache/servers";
-import { eq } from "drizzle-orm";
+import { db, eq, ServerTable } from "@shared/drizzle";
 import { Server } from "../types/servers";
 import { getChannelGlobalTag } from "@/features/channels/cache/channels";
 

@@ -1,6 +1,4 @@
-import { db } from "@shared/drizzle/db";
-import { ChatTable } from "@shared/drizzle/schema";
-import { eq } from "drizzle-orm";
+import { db, ChatTable, eq } from "@shared/drizzle";
 
 async function getChatByKey(chatKey: string) {
   return await db.query.ChatTable.findFirst({

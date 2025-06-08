@@ -1,4 +1,4 @@
-import { db } from "@shared/drizzle/db";
+import { db } from "@shared/drizzle";
 import { revalidateChannelMessageCache } from "../cache/channelMessages";
 import { ChannelMessageTable } from "@shared/drizzle/schema";
 

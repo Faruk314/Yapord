@@ -1,6 +1,4 @@
-import { db } from "@shared/drizzle/db";
-import { eq } from "drizzle-orm";
-import { UserTable } from "@shared/drizzle/schema";
+import { db, UserTable, eq } from "@shared/drizzle";
 import { generateSalt, hashPassword } from "../utils/auth";
 import { getUserIdTag, revalidateUserCache } from "../cache/user";
 import { cacheTag } from "next/dist/server/use-cache/cache-tag";
