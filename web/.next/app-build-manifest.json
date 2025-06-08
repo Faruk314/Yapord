@@ -16,11 +16,6 @@
       "static/chunks/main-app.js",
       "static/chunks/app/(private)/home/layout.js"
     ],
-    "/(private)/home/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/(private)/home/page.js"
-    ],
     "/(private)/home/friends/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
@@ -31,20 +26,30 @@
       "static/chunks/main-app.js",
       "static/chunks/app/(private)/home/friends/page.js"
     ],
+    "/(private)/home/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(private)/home/page.js"
+    ],
+    "/(private)/server/[serverId]/layout": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(private)/server/[serverId]/layout.js"
+    ],
+    "/(private)/server/[serverId]/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(private)/server/[serverId]/page.js"
+    ],
+    "/(private)/home/friends/pending/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(private)/home/friends/pending/page.js"
+    ],
     "/(private)/home/chat/[chatId]/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/(private)/home/chat/[chatId]/page.js"
-    ],
-    "/(private)/home/friends/add/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/(private)/home/friends/add/page.js"
-    ],
-    "/_not-found/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/_not-found/page.js"
     ]
   }
 }

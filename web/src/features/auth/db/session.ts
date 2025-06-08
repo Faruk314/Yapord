@@ -2,7 +2,7 @@ import { sessionSchema } from "../schemas/session";
 import { z } from "zod";
 import crypto from "crypto";
 import { cookies } from "next/headers";
-import { redisClient } from "@/redis/redis";
+import { redisClient } from "@shared/redis/redis";
 
 const SESSION_EXPIRATION_SECONDS = 60 * 60 * 24 * 7;
 

@@ -1,4 +1,4 @@
-import { redisClient } from "@/redis/redis";
+import { redisClient } from "@shared/redis/redis";
 import { IredisUser } from "../../types/user";
 
 const USERS_KEY = "users";
