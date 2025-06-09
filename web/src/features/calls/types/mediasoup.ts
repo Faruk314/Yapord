@@ -23,11 +23,4 @@ interface Iconsumer extends types.Consumer {
   appData: { user: Iuser };
 }
 
-type ConnectTransportCallback = (response?: { error: string } | null) => void;
-
-export type {
-  Itransport,
-  ConnectTransportCallback,
-  ProducerAppData,
-  Iconsumer,
-};
+export type { Itransport, ProducerAppData, Iconsumer };

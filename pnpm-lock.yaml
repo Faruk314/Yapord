@@ -19,6 +19,9 @@ importers:
       dotenv:
         specifier: ^16.5.0
         version: 16.5.0
+      mediasoup:
+        specifier: ^3.16.0
+        version: 3.16.0
       nodemon:
         specifier: ^3.1.10
         version: 3.1.10
@@ -101,9 +104,6 @@ importers:
       lucide-react:
         specifier: ^0.503.0
         version: 0.503.0(react@19.1.0)
-      mediasoup:
-        specifier: ^3.15.8
-        version: 3.16.0
       mediasoup-client:
         specifier: ^3.11.0
         version: 3.11.0
@@ -134,9 +134,6 @@ importers:
       react-textarea-autosize:
         specifier: ^8.5.9
         version: 8.5.9(@types/react@19.1.6)(react@19.1.0)
-      socket.io:
-        specifier: ^4.8.1
-        version: 4.8.1
       socket.io-client:
         specifier: ^4.8.1
         version: 4.8.1
@@ -3610,7 +3607,7 @@ snapshots:
   '@eslint/config-array@0.20.0':
     dependencies:
       '@eslint/object-schema': 2.1.6
-      debug: 4.4.1(supports-color@10.0.0)
+      debug: 4.4.1(supports-color@5.5.0)
       minimatch: 3.1.2
     transitivePeerDependencies:
       - supports-color
@@ -3624,7 +3621,7 @@ snapshots:
   '@eslint/eslintrc@3.3.1':
     dependencies:
       ajv: 6.12.6
-      debug: 4.4.1(supports-color@10.0.0)
+      debug: 4.4.1(supports-color@5.5.0)
       espree: 10.3.0
       globals: 14.0.0
       ignore: 5.3.2
@@ -4294,7 +4291,7 @@ snapshots:
       '@typescript-eslint/types': 8.33.1
       '@typescript-eslint/typescript-estree': 8.33.1(typescript@5.8.3)
       '@typescript-eslint/visitor-keys': 8.33.1
-      debug: 4.4.1(supports-color@10.0.0)
+      debug: 4.4.1(supports-color@5.5.0)
       eslint: 9.28.0(jiti@2.4.2)
       typescript: 5.8.3
     transitivePeerDependencies:
@@ -4304,7 +4301,7 @@ snapshots:
     dependencies:
       '@typescript-eslint/tsconfig-utils': 8.33.1(typescript@5.8.3)
       '@typescript-eslint/types': 8.33.1
-      debug: 4.4.1(supports-color@10.0.0)
+      debug: 4.4.1(supports-color@5.5.0)
       typescript: 5.8.3
     transitivePeerDependencies:
       - supports-color
@@ -4322,7 +4319,7 @@ snapshots:
     dependencies:
       '@typescript-eslint/typescript-estree': 8.33.1(typescript@5.8.3)
       '@typescript-eslint/utils': 8.33.1(eslint@9.28.0(jiti@2.4.2))(typescript@5.8.3)
-      debug: 4.4.1(supports-color@10.0.0)
+      debug: 4.4.1(supports-color@5.5.0)
       eslint: 9.28.0(jiti@2.4.2)
       ts-api-utils: 2.1.0(typescript@5.8.3)
       typescript: 5.8.3
@@ -4337,7 +4334,7 @@ snapshots:
       '@typescript-eslint/tsconfig-utils': 8.33.1(typescript@5.8.3)
       '@typescript-eslint/types': 8.33.1
       '@typescript-eslint/visitor-keys': 8.33.1
-      debug: 4.4.1(supports-color@10.0.0)
+      debug: 4.4.1(supports-color@5.5.0)
       fast-glob: 3.3.3
       is-glob: 4.0.3
       minimatch: 9.0.5
@@ -4913,7 +4910,7 @@ snapshots:
 
   esbuild-register@3.6.0(esbuild@0.25.5):
     dependencies:
-      debug: 4.4.1(supports-color@10.0.0)
+      debug: 4.4.1(supports-color@5.5.0)
       esbuild: 0.25.5
     transitivePeerDependencies:
       - supports-color
@@ -5004,7 +5001,7 @@ snapshots:
   eslint-import-resolver-typescript@3.10.1(eslint-plugin-import@2.31.0)(eslint@9.28.0(jiti@2.4.2)):
     dependencies:
       '@nolyfill/is-core-module': 1.0.39
-      debug: 4.4.1(supports-color@10.0.0)
+      debug: 4.4.1(supports-color@5.5.0)
       eslint: 9.28.0(jiti@2.4.2)
       get-tsconfig: 4.10.1
       is-bun-module: 2.0.0
@@ -5128,7 +5125,7 @@ snapshots:
       ajv: 6.12.6
       chalk: 4.1.2
       cross-spawn: 7.0.6
-      debug: 4.4.1(supports-color@10.0.0)
+      debug: 4.4.1(supports-color@5.5.0)
       escape-string-regexp: 4.0.0
       eslint-scope: 8.3.0
       eslint-visitor-keys: 4.2.0
@@ -5385,7 +5382,7 @@ snapshots:
     dependencies:
       '@ioredis/commands': 1.2.0
       cluster-key-slot: 1.1.2
-      debug: 4.4.1(supports-color@10.0.0)
+      debug: 4.4.1(supports-color@5.5.0)
       denque: 2.1.0
       lodash.defaults: 4.2.0
       lodash.isarguments: 3.1.0

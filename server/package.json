@@ -5,17 +5,18 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "dotenv -e ../.env -- tsx -r tsconfig-paths/register server.ts"
+    "dev": "dotenv -e ../.env -- tsx -r tsconfig-paths/register ./websocket/server.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@yapord/shared": "workspace:*",
     "dotenv": "^16.5.0",
+    "mediasoup": "^3.16.0",
     "nodemon": "^3.1.10",
     "socket.io": "^4.8.1",
-    "tsconfig-paths": "^4.2.0",
-    "@yapord/shared": "workspace:*"
+    "tsconfig-paths": "^4.2.0"
   },
   "devDependencies": {
     "dotenv-cli": "^8.0.0",
