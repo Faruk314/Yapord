@@ -1,10 +1,10 @@
-import { ConnectTransportCallback } from "@/features/calls/types/mediasoup";
+import { ConnectTransportCallback } from "../../types/mediasoup";
 import {
   getOrCreateRouter,
   userConsumerMap,
   userProducerMap,
   userTransportMap,
-} from "@/mediasoup/mediasoup";
+} from "../../mediasoup/mediasoup";
 import { types } from "mediasoup";
 
 import { Server, Socket } from "socket.io";

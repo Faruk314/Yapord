@@ -1,8 +1,9 @@
-import { getUser } from "@/features/auth/db/redis/user";
+import { getUser } from "@yapord/shared/redis/methods/user";
 import {
   addChannelMember,
   removeChannelMember,
-} from "@/features/channels/db/redis/channelRooms";
+} from "@yapord/shared/redis/methods/channel";
+
 import { Server, Socket } from "socket.io";
 
 class CallListeners {
