@@ -6,7 +6,7 @@ import {
 import { db, eq, ChannelTable } from "@shared/drizzle";
 import { cacheTag } from "next/dist/server/use-cache/cache-tag";
 import { getChannelMessagesChannelTag } from "../cache/channelMessages";
-import { populateChannelsWithMembers } from "./redis/channelRooms";
+import { populateChannelsWithMembers } from "@shared/redis/methods/channel";
 
 async function getChannels(serverId: string) {
   "use cache";

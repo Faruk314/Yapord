@@ -9,7 +9,7 @@ import {
   addChannelMember,
   addChannelToServerSet,
   removeChannelMember,
-} from "../db/redis/channelRooms";
+} from "@shared/redis/methods/channel";
 import { db } from "@shared/drizzle/db";
 
 async function createChannel(
