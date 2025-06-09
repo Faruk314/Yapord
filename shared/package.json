@@ -2,6 +2,7 @@
   "name": "@yapord/shared",
   "version": "1.0.0",
   "main": "index.ts",
+  "type": "module",
   "scripts": {
     "migrate:generate": "drizzle-kit generate --config ./drizzle.config.ts",
     "migrate:push": "drizzle-kit push --config ./drizzle.config.ts"

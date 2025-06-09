@@ -1,5 +1,5 @@
 import { ChannelType } from "@shared/drizzle/schema";
-import { getUser, insertUser } from "@/features/auth/db/redis/user";
+import { getUser, insertUser } from "@shared/redis/methods/user";
 import { redisClient } from "@shared/redis/redis";
 
 const ROOMS_KEY = "channel";

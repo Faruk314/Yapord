@@ -4,11 +4,4 @@ interface Iuser {
   image: string | null;
 }
 
-interface IredisUser {
-  id: string;
-
-  channelId: string | null;
-  socketId: string;
-}
-
-export type { Iuser, IredisUser };
+export type { Iuser };
