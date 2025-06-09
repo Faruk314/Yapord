@@ -1,8 +1,0 @@
-{
-  "/favicon.ico/route": "app/favicon.ico/route.js",
-  "/(private)/home/page": "app/(private)/home/page.js",
-  "/(private)/server/[serverId]/page": "app/(private)/server/[serverId]/page.js",
-  "/(private)/home/chat/[chatId]/page": "app/(private)/home/chat/[chatId]/page.js",
-  "/(private)/home/friends/page": "app/(private)/home/friends/page.js",
-  "/(private)/home/friends/pending/page": "app/(private)/home/friends/pending/page.js"
-}
