@@ -1,8 +1,12 @@
 import { ConnectTransportCallback } from "../../types/mediasoup";
-import { getOrCreateRouter, peers } from "../../mediasoup/mediasoup";
+import { getOrCreateRouter } from "../../mediasoup/mediasoup";
+import { getPeer, peers } from "mediasoup/methods/peer";
 import { types } from "mediasoup";
 
 import { Server, Socket } from "socket.io";
+import { setupConsumerListeners } from "mediasoup/methods/consumer";
+import { setupProducerListeners } from "mediasoup/methods/producer";
+import { createWebRtcTransport } from "mediasoup/methods/transport";
 
 class MediasoupListeners {
   io: Server;
@@ -36,15 +40,6 @@ class MediasoupListeners {
   async onGetRtpCapabilities({ channelId }: { channelId: string }) {
     const router = await getOrCreateRouter(channelId);
 
-    const peer = {
-      id: this.socket.user.id,
-      channelId,
-      producers: new Map(),
-      consumers: new Map(),
-    };
-
-    peers.set(this.socket.id, peer);
-
     this.socket.emit("rtpCapabilities", {
       channelId,
       routerRtpCapabilities: router.rtpCapabilities,
@@ -52,52 +47,22 @@ class MediasoupListeners {
   }
 
   async onCreateTransport({ channelId }: { channelId: string }) {
-    const router = await getOrCreateRouter(channelId);
-    const peer = peers.get(this.socket.id);
+    const sendTransportData = await createWebRtcTransport(
+      channelId,
+      this.socket.id,
+      "send"
+    );
 
-    if (!peer) {
-      throw new Error("Peer state not found");
-    }
-
-    const sendTransport = await router.createWebRtcTransport({
-      listenIps: [{ ip: "127.0.0.1", announcedIp: undefined }],
-      enableUdp: true,
-      enableTcp: true,
-      preferUdp: true,
-    });
-
-    const recvTransport = await router.createWebRtcTransport({
-      listenIps: [{ ip: "127.0.0.1", announcedIp: undefined }],
-      enableUdp: true,
-      enableTcp: true,
-      preferUdp: true,
-    });
-
-    peer.sendTransport = sendTransport;
-    peer.recvTransport = recvTransport;
+    const recvTransportData = await createWebRtcTransport(
+      channelId,
+      this.socket.id,
+      "recv"
+    );
 
     this.socket.emit("transportCreated", {
       channelId,
-      sendTransportData: {
-        id: sendTransport.id,
-        iceParameters: sendTransport.iceParameters,
-        iceCandidates: sendTransport.iceCandidates,
-        dtlsParameters: sendTransport.dtlsParameters,
-        iceServers: [
-          { urls: "stun:stun.l.google.com:19302" },
-          { urls: "stun:stun1.l.google.com:19302" },
-        ],
-      },
-      recvTransportData: {
-        id: recvTransport.id,
-        iceParameters: recvTransport.iceParameters,
-        iceCandidates: recvTransport.iceCandidates,
-        dtlsParameters: recvTransport.dtlsParameters,
-        iceServers: [
-          { urls: "stun:stun.l.google.com:19302" },
-          { urls: "stun:stun1.l.google.com:19302" },
-        ],
-      },
+      sendTransportData,
+      recvTransportData,
     });
   }
 
@@ -111,7 +76,7 @@ class MediasoupListeners {
     },
     callback: ConnectTransportCallback
   ) {
-    const peer = peers.get(this.socket.id);
+    const peer = getPeer(this.socket.id);
 
     const sendTransport = peer?.sendTransport;
 
@@ -141,7 +106,7 @@ class MediasoupListeners {
     },
     callback: ConnectTransportCallback
   ) {
-    const peer = peers.get(this.socket.id);
+    const peer = getPeer(this.socket.id);
 
     const recvTransport = peer?.recvTransport;
 
@@ -177,7 +142,7 @@ class MediasoupListeners {
     },
     callback: (response?: { id?: string; error?: string } | null) => void
   ) {
-    const peer = peers.get(this.socket.id);
+    const peer = getPeer(this.socket.id);
 
     const sendTransport = peer?.sendTransport;
 
@@ -198,21 +163,7 @@ class MediasoupListeners {
 
     peer.producers.set(producer.id, producer);
 
-    producer.on("transportclose", () => {
-      peer.producers.delete(producer.id);
-
-      this.socket
-        .to(channelId)
-        .emit("producerClosed", { producerId: producer.id });
-    });
-
-    producer.on("@close", () => {
-      peer.producers.delete(producer.id);
-
-      this.socket
-        .to(channelId)
-        .emit("producerClosed", { producerId: producer.id });
-    });
+    setupProducerListeners(this.socket, peer, producer);
 
     this.socket.to(channelId).emit("newProducer", {
       producerId: producer.id,
@@ -243,7 +194,7 @@ class MediasoupListeners {
       return callback({ error: "Mediasoup Router not found." });
     }
 
-    const peer = peers.get(this.socket.id);
+    const peer = getPeer(this.socket.id);
 
     const recvTransport = peer?.recvTransport;
 
@@ -285,32 +236,7 @@ class MediasoupListeners {
 
     peer.consumers.set(consumer.id, consumer);
 
-    consumer.on("transportclose", () => {
-      peer.consumers.delete(consumer.id);
-    });
-
-    consumer.on("producerclose", () => {
-      consumer.close();
-
-      peer.consumers.delete(consumer.id);
-
-      this.socket.emit("consumerClosed", {
-        consumerId: consumer.id,
-        producerId: consumer.producerId,
-      });
-    });
-
-    consumer.on("producerpause", () => {
-      consumer.pause();
-
-      this.socket.emit("consumerResumed", { consumerId: consumer.id });
-    });
-
-    consumer.on("producerresume", () => {
-      consumer.resume();
-    });
-
-    console.log("finished creating consumer");
+    setupConsumerListeners(this.socket, peer, consumer);
 
     const response = {
       id: consumer.id,

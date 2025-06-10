@@ -1,7 +1,4 @@
 import { createWorker, types } from "mediasoup";
-import { Ipeer } from "types/mediasoup";
-
-const peers: Map<string, Ipeer> = new Map();
 
 type MediasoupState = {
   worker: types.Worker;
@@ -56,4 +53,4 @@ async function getOrCreateRouter(channelId: string) {
   return router;
 }
 
-export { peers, initMediasoupWorker, getOrCreateRouter };
+export { initMediasoupWorker, getOrCreateRouter };
