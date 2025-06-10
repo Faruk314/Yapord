@@ -5,6 +5,13 @@ import {
 } from "@yapord/shared/redis/methods/channel";
 
 import { Server, Socket } from "socket.io";
+import {
+  cleanupPeerResources,
+  createPeer,
+  deletePeer,
+  getPeer,
+  peers,
+} from "mediasoup/methods/peer";
 
 class CallListeners {
   io: Server;
@@ -19,6 +26,7 @@ class CallListeners {
     this.socket.on("callUser", this.onCallUser.bind(this));
     this.socket.on("callDecline", this.onCallDecline.bind(this));
     this.socket.on("callAccept", this.onCallAccept.bind(this));
+    this.socket.on("callLeave", this.onCallLeave.bind(this));
   }
 
   async onCallUser({
@@ -32,9 +40,11 @@ class CallListeners {
 
     if (!recipient) return console.error("Recipient not found");
 
+    await addChannelMember(channelId, this.socket.user.id);
+
     this.socket.join(channelId);
 
-    await addChannelMember(channelId, this.socket.user.id);
+    createPeer(this.socket.id, this.socket.user.id, channelId);
 
     this.socket
       .to(recipient?.socketId)
@@ -52,7 +62,7 @@ class CallListeners {
 
     if (!removedMember) return;
 
-    console.log(removedMember, "removed member");
+    deletePeer(removedMember.socketId);
 
     this.socket.leave(channelId);
 
@@ -60,11 +70,24 @@ class CallListeners {
   }
 
   async onCallAccept({ channelId }: { channelId: string }) {
-    this.socket.join(channelId);
-
     await addChannelMember(channelId, this.socket.user.id);
 
+    this.socket.join(channelId);
+
+    createPeer(this.socket.id, this.socket.user.id, channelId);
+
     this.io.to(channelId).emit("callAccepted", { channelId });
+  }
+
+  async onCallLeave() {
+    const peer = getPeer(this.socket.id);
+
+    if (!peer)
+      throw new Error("Could not initate leave call peer does not exist");
+
+    await removeChannelMember(peer.channelId, peer.userId);
+
+    cleanupPeerResources(peer.id);
   }
 }
 
