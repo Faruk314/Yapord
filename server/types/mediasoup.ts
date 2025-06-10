@@ -2,6 +2,8 @@ import { types } from "mediasoup";
 
 interface Ipeer {
   id: string;
+  userId: string;
+  channelId: string;
   sendTransport?: types.WebRtcTransport;
   recvTransport?: types.WebRtcTransport;
   producers: Map<string, types.Producer>;
