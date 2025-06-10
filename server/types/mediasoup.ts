@@ -1,3 +1,13 @@
+import { types } from "mediasoup";
+
+interface Ipeer {
+  id: string;
+  sendTransport?: types.WebRtcTransport;
+  recvTransport?: types.WebRtcTransport;
+  producers: Map<string, types.Producer>;
+  consumers: Map<string, types.Consumer>;
+}
+
 type ConnectTransportCallback = (response?: { error: string } | null) => void;
 
-export type { ConnectTransportCallback };
+export type { Ipeer, ConnectTransportCallback };

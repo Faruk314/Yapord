@@ -1,10 +1,5 @@
 import { ConnectTransportCallback } from "../../types/mediasoup";
-import {
-  getOrCreateRouter,
-  userConsumerMap,
-  userProducerMap,
-  userTransportMap,
-} from "../../mediasoup/mediasoup";
+import { getOrCreateRouter, peers } from "../../mediasoup/mediasoup";
 import { types } from "mediasoup";
 
 import { Server, Socket } from "socket.io";
@@ -41,6 +36,15 @@ class MediasoupListeners {
   async onGetRtpCapabilities({ channelId }: { channelId: string }) {
     const router = await getOrCreateRouter(channelId);
 
+    const peer = {
+      id: this.socket.user.id,
+      channelId,
+      producers: new Map(),
+      consumers: new Map(),
+    };
+
+    peers.set(this.socket.id, peer);
+
     this.socket.emit("rtpCapabilities", {
       channelId,
       routerRtpCapabilities: router.rtpCapabilities,
@@ -49,6 +53,11 @@ class MediasoupListeners {
 
   async onCreateTransport({ channelId }: { channelId: string }) {
     const router = await getOrCreateRouter(channelId);
+    const peer = peers.get(this.socket.id);
+
+    if (!peer) {
+      throw new Error("Peer state not found");
+    }
 
     const sendTransport = await router.createWebRtcTransport({
       listenIps: [{ ip: "127.0.0.1", announcedIp: undefined }],
@@ -64,10 +73,8 @@ class MediasoupListeners {
       preferUdp: true,
     });
 
-    userTransportMap.set(this.socket.id, {
-      send: sendTransport,
-      recv: recvTransport,
-    });
+    peer.sendTransport = sendTransport;
+    peer.recvTransport = recvTransport;
 
     this.socket.emit("transportCreated", {
       channelId,
@@ -104,7 +111,9 @@ class MediasoupListeners {
     },
     callback: ConnectTransportCallback
   ) {
-    const sendTransport = userTransportMap.get(this.socket.id)?.send;
+    const peer = peers.get(this.socket.id);
+
+    const sendTransport = peer?.sendTransport;
 
     if (!sendTransport || sendTransport.id !== transportId) {
       return callback({ error: "Send Transport not found or ID mismatch" });
@@ -132,7 +141,9 @@ class MediasoupListeners {
     },
     callback: ConnectTransportCallback
   ) {
-    const recvTransport = userTransportMap.get(this.socket.id)?.recv;
+    const peer = peers.get(this.socket.id);
+
+    const recvTransport = peer?.recvTransport;
 
     if (!recvTransport || recvTransport.id !== transportId) {
       return callback({ error: "Recv Transport not found or ID mismatch" });
@@ -166,7 +177,9 @@ class MediasoupListeners {
     },
     callback: (response?: { id?: string; error?: string } | null) => void
   ) {
-    const sendTransport = userTransportMap.get(this.socket.id)?.send;
+    const peer = peers.get(this.socket.id);
+
+    const sendTransport = peer?.sendTransport;
 
     if (!sendTransport || sendTransport.id !== transportId) {
       return callback({ error: "Send Transport not found or ID mismatch" });
@@ -174,7 +187,7 @@ class MediasoupListeners {
 
     const producerAppData: types.AppData = {
       ...(appData || {}),
-      user: this.socket.user,
+      user: { ...this.socket.user, socketId: this.socket.id },
     };
 
     const producer = await sendTransport.produce({
@@ -183,14 +196,22 @@ class MediasoupListeners {
       appData: producerAppData,
     });
 
-    userProducerMap.set(producer.id, producer);
+    peer.producers.set(producer.id, producer);
 
     producer.on("transportclose", () => {
-      userProducerMap.delete(producer.id);
+      peer.producers.delete(producer.id);
+
+      this.socket
+        .to(channelId)
+        .emit("producerClosed", { producerId: producer.id });
     });
 
     producer.on("@close", () => {
-      userProducerMap.delete(producer.id);
+      peer.producers.delete(producer.id);
+
+      this.socket
+        .to(channelId)
+        .emit("producerClosed", { producerId: producer.id });
     });
 
     this.socket.to(channelId).emit("newProducer", {
@@ -222,15 +243,25 @@ class MediasoupListeners {
       return callback({ error: "Mediasoup Router not found." });
     }
 
-    const consumerTransport = userTransportMap.get(this.socket.id)?.recv;
+    const peer = peers.get(this.socket.id);
 
-    if (!consumerTransport || consumerTransport.id !== recvTransportId) {
+    const recvTransport = peer?.recvTransport;
+
+    if (!recvTransport || recvTransport.id !== recvTransportId) {
       return callback({
         error: `Client's receive transport ${recvTransportId} not found or transport id mismatch.`,
       });
     }
 
-    const producerToConsume = userProducerMap.get(producerId);
+    let producerToConsume: types.Producer | undefined;
+
+    for (const p of peers.values()) {
+      if (p.producers.has(producerId)) {
+        producerToConsume = p.producers.get(producerId);
+
+        break;
+      }
+    }
 
     if (!producerToConsume) {
       return callback({ error: `Producer with ID ${producerId} not found.` });
@@ -245,29 +276,34 @@ class MediasoupListeners {
       });
     }
 
-    const consumer = await consumerTransport.consume({
+    const consumer = await recvTransport.consume({
       producerId: producerToConsume.id,
       rtpCapabilities,
       paused: producerToConsume.paused,
       appData: producerToConsume.appData,
     });
 
-    userConsumerMap.set(consumer.id, [
-      ...(userConsumerMap.get(consumer.id) || []),
-      consumer,
-    ]);
+    peer.consumers.set(consumer.id, consumer);
 
     consumer.on("transportclose", () => {
-      userConsumerMap.delete(consumer.id);
+      peer.consumers.delete(consumer.id);
     });
 
     consumer.on("producerclose", () => {
       consumer.close();
-      userConsumerMap.delete(consumer.id);
+
+      peer.consumers.delete(consumer.id);
+
+      this.socket.emit("consumerClosed", {
+        consumerId: consumer.id,
+        producerId: consumer.producerId,
+      });
     });
 
     consumer.on("producerpause", () => {
       consumer.pause();
+
+      this.socket.emit("consumerResumed", { consumerId: consumer.id });
     });
 
     consumer.on("producerresume", () => {

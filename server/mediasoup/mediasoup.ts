@@ -1,14 +1,7 @@
 import { createWorker, types } from "mediasoup";
+import { Ipeer } from "types/mediasoup";
 
-const userTransportMap = new Map<
-  string,
-  {
-    send: types.WebRtcTransport;
-    recv: types.WebRtcTransport;
-  }
->();
-const userProducerMap = new Map<string, types.Producer>();
-const userConsumerMap = new Map<string, types.Consumer[]>();
+const peers: Map<string, Ipeer> = new Map();
 
 type MediasoupState = {
   worker: types.Worker;
@@ -63,10 +56,4 @@ async function getOrCreateRouter(channelId: string) {
   return router;
 }
 
-export {
-  initMediasoupWorker,
-  getOrCreateRouter,
-  userTransportMap,
-  userProducerMap,
-  userConsumerMap,
-};
+export { peers, initMediasoupWorker, getOrCreateRouter };
