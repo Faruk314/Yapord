@@ -8,6 +8,7 @@ import React, { useState } from "react";
 import classNames from "classnames";
 import CallAvatar from "../CallAvatar";
 import { useMediasoupStore } from "../../store/mediasoup";
+import useCallManager from "../../hooks/mediasoup/useCallManager";
 
 interface Props {
   userInfo: Iuser;
@@ -17,6 +18,7 @@ interface Props {
 
 export default function PrivateCall({ userInfo, recipientInfo }: Props) {
   const [openFullScreen, setOpenFullScreen] = useState(false);
+  const { leaveCall } = useCallManager();
   const consumers = useMediasoupStore((state) => state.consumers);
   const localStream = useMediasoupStore((state) => state.localStream);
 
@@ -25,10 +27,6 @@ export default function PrivateCall({ userInfo, recipientInfo }: Props) {
   function handleFullScreen() {
     setOpenFullScreen((prev) => !prev);
   }
-
-  // function handleCallClick() {
-  //   setOpenVideo(true);
-  // }
 
   return (
     <div
@@ -62,7 +60,9 @@ export default function PrivateCall({ userInfo, recipientInfo }: Props) {
           <IconBtn icon={<Video />} />
           <IconBtn icon={<ScreenShare />} />
           <IconBtn icon={<Mic />} />
+
           <IconBtn
+            onClick={leaveCall}
             className="bg-red-600 hover:bg-red-500"
             icon={<PhoneOff />}
           />

@@ -8,10 +8,10 @@ type MediasoupState = {
   recvTransport: types.Transport | null;
   consumers: Map<string, Iconsumer>;
   localStream: MediaStream | null;
-  setDevice: (device: Device) => void;
-  setSendTransport: (transport: types.Transport) => void;
-  setRecvTransport: (transport: types.Transport) => void;
-  setLocalStream: (stream: MediaStream) => void;
+  setDevice: (device: Device | null) => void;
+  setSendTransport: (transport: types.Transport | null) => void;
+  setRecvTransport: (transport: types.Transport | null) => void;
+  setLocalStream: (stream: MediaStream | null) => void;
   resetMediasoupState: () => void;
   addConsumer: (id: string, consumer: Iconsumer) => void;
   removeConsumer: (id: string) => void;

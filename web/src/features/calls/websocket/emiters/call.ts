@@ -17,9 +17,14 @@ export function useCallEmiters() {
     socket?.emit("callAccept", data);
   }
 
+  function emitCallLeave() {
+    socket?.emit("callLeave");
+  }
+
   return {
     emitUserCall,
     emitCallDecline,
     emitCallAccept,
+    emitCallLeave,
   };
 }
