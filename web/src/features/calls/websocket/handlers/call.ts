@@ -5,11 +5,13 @@ import { useCallStore } from "../../store/call";
 import { useChatCallStore } from "@/features/chats/store /ChatCalls";
 import { useMediasoupEmiters } from "../emiters/mediasoup";
 import { useCallback } from "react";
+import useCallManager from "../../hooks/mediasoup/useCallManager";
 
 export function useCallHandlers() {
   const { emitGetRtpCapabilities } = useMediasoupEmiters();
   const closeChatCallModal = useChatCallStore((state) => state.closeCallModal);
   const openCallModal = useCallStore((state) => state.openCallModal);
+  const { leaveCall } = useCallManager();
   const setIncomingCallInfo = useCallStore(
     (state) => state.setIncomingCallInfo
   );
@@ -33,9 +35,14 @@ export function useCallHandlers() {
     [emitGetRtpCapabilities]
   );
 
+  const onCallEnded = useCallback(() => {
+    leaveCall();
+  }, [leaveCall]);
+
   return {
     onIncomingCall,
     onCallDeclined,
     onCallAccepted,
+    onCallEnded,
   };
 }

@@ -83,11 +83,15 @@ class CallListeners {
     const peer = getPeer(this.socket.id);
 
     if (!peer)
-      throw new Error("Could not initate leave call peer does not exist");
+      return console.error("Could not initate leave call peer does not exist");
 
     await removeChannelMember(peer.channelId, peer.userId);
 
     cleanupPeerResources(peer.id);
+
+    this.socket.leave(peer.channelId);
+
+    this.io.to(peer.channelId).emit("callEnded");
   }
 }
 

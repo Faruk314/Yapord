@@ -2,7 +2,7 @@
 
 import { Device, types } from "mediasoup-client";
 import { useMediasoupEmiters } from "../emiters/mediasoup";
-import { Itransport, ProducerAppData } from "../../types/mediasoup";
+import { Iconsumer, Itransport, ProducerAppData } from "../../types/mediasoup";
 import { useMediasoupStore } from "../../store/mediasoup";
 import { getCurrentUser } from "@/features/auth/actions/user";
 import { useCallback } from "react";
@@ -16,6 +16,8 @@ export function useMediasoupHandlers() {
   const device = useMediasoupStore((state) => state.device);
   const setDevice = useMediasoupStore((state) => state.setDevice);
   const clientRecvTransport = useMediasoupStore((state) => state.recvTransport);
+  const removeConsumer = useMediasoupStore((state) => state.removeConsumer);
+  const consumers = useMediasoupStore((state) => state.consumers);
 
   const onRtpCapabilities = useCallback(
     async ({
@@ -84,5 +86,48 @@ export function useMediasoupHandlers() {
     [clientRecvTransport, setupConsumer, device]
   );
 
-  return { onRtpCapabilities, onTransportCreated, onNewProducer };
+  const onProducerClosed = useCallback(
+    (data: { producerId: string }) => {
+      const { producerId } = data;
+
+      const consumersToClose: Iconsumer[] = [];
+
+      consumers.forEach((consumer) => {
+        if (consumer.producerId === producerId) {
+          consumersToClose?.push(consumer);
+        }
+      });
+
+      consumersToClose.forEach((consumer) => {
+        consumer.close();
+        removeConsumer(consumer.id);
+      });
+    },
+    [consumers, removeConsumer]
+  );
+
+  const onConsumerClosed = useCallback(
+    (data: { consumerId: string }) => {
+      const { consumerId } = data;
+
+      const consumer = consumers.get(consumerId);
+
+      if (consumer) {
+        consumer?.close();
+
+        removeConsumer(consumer.id);
+      }
+
+      console.log(consumer, "consumer on consumer closed in frontend");
+    },
+    [consumers, removeConsumer]
+  );
+
+  return {
+    onRtpCapabilities,
+    onTransportCreated,
+    onNewProducer,
+    onProducerClosed,
+    onConsumerClosed,
+  };
 }

@@ -1,5 +1,6 @@
 "use client";
 
+import { useChatCallStore } from "@/features/chats/store /ChatCalls";
 import { useMediasoupStore } from "../../store/mediasoup";
 import { useCallEmiters } from "../../websocket/emiters/call";
 
@@ -11,6 +12,7 @@ export default function useCallManager() {
   const localStream = useMediasoupStore((state) => state.localStream);
   const setLocalStream = useMediasoupStore((state) => state.setLocalStream);
   const setDevice = useMediasoupStore((state) => state.setDevice);
+  const closeChatCallModal = useChatCallStore((state) => state.closeCallModal);
 
   const { emitCallLeave } = useCallEmiters();
 
@@ -33,6 +35,7 @@ export default function useCallManager() {
     setSendTransport(null);
     setRecvTransport(null);
     setDevice(null);
+    closeChatCallModal();
   }
 
   return { leaveCall };
