@@ -6,13 +6,18 @@ import { useCallEmiters } from "../../websocket/emiters/call";
 
 export default function useCallManager() {
   const consumers = useMediasoupStore((state) => state.consumers);
+  const producers = useMediasoupStore((state) => state.producers);
+  const removeProducer = useMediasoupStore((state) => state.removeProducer);
   const removeConsumer = useMediasoupStore((state) => state.removeConsumer);
   const setSendTransport = useMediasoupStore((state) => state.setSendTransport);
   const setRecvTransport = useMediasoupStore((state) => state.setRecvTransport);
-  const localStream = useMediasoupStore((state) => state.localStream);
-  const setLocalStream = useMediasoupStore((state) => state.setLocalStream);
+  const localStreams = useMediasoupStore((state) => state.localStreams);
+  const removeLocalStream = useMediasoupStore(
+    (state) => state.removeLocalStream
+  );
   const setDevice = useMediasoupStore((state) => state.setDevice);
   const closeChatCallModal = useChatCallStore((state) => state.closeCallModal);
+  const getProducer = useMediasoupStore((state) => state.getProducer);
 
   const { emitCallLeave } = useCallEmiters();
 
@@ -27,16 +32,33 @@ export default function useCallManager() {
   function leaveCall() {
     emitCallLeave();
 
-    localStream?.getTracks().forEach((track) => track.stop());
-    setLocalStream(null);
+    localStreams.forEach((stream, type) => {
+      stream.getTracks().forEach((track) => track.stop());
+      removeLocalStream(type);
+    });
 
-    consumers.forEach((consumer) => closeConsumer(consumer.id));
+    producers.forEach((producer, type) => {
+      producer.close();
+      removeProducer(type);
+    });
+
+    consumers.forEach((consumer) => {
+      consumer.close();
+      closeConsumer(consumer.id);
+    });
 
     setSendTransport(null);
     setRecvTransport(null);
     setDevice(null);
+
     closeChatCallModal();
   }
 
-  return { leaveCall };
+  function toogleCamera() {
+    const producer = getProducer("webcam");
+
+    producer?.pause();
+  }
+
+  return { leaveCall, toogleCamera };
 }
