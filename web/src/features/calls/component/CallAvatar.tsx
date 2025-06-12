@@ -7,19 +7,15 @@ import { Iconsumer } from "../types/mediasoup";
 
 interface Props {
   consumer?: Iconsumer;
-  localStream?: MediaStream | null;
-  LocalConsumer?: { user: Iuser; localStream: MediaStream | null };
+  localConsumer?: { user: Iuser; localStream: MediaStream | null };
 }
 
-export default function CallAvatar({
-  consumer,
-  localStream,
-  LocalConsumer,
-}: Props) {
+export default function CallAvatar({ consumer, localConsumer }: Props) {
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
-  const effectiveStream = localStream ?? LocalConsumer?.localStream ?? null;
-  const effectiveUser = LocalConsumer?.user ?? consumer?.appData?.user;
+  const effectiveStream =
+    localConsumer?.localStream ?? localConsumer?.localStream ?? null;
+  const effectiveUser = localConsumer?.user ?? consumer?.appData?.user;
 
   const hasVideoTrack =
     consumer?.track?.kind === "video" && consumer.track.enabled;
@@ -64,7 +60,7 @@ export default function CallAvatar({
         ref={videoRef}
         autoPlay
         playsInline
-        muted={Boolean(LocalConsumer)}
+        muted={Boolean(localConsumer)}
       />
       <span className="absolute bottom-2 bg-black opacity-[0.8] text-white rounded-md px-2 left-2 text-xl text-[0.8rem] font-semibold">
         {effectiveUser?.name ?? "Unknown"}

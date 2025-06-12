@@ -172,6 +172,8 @@ class MediasoupListeners {
       kind: producer.kind,
       appData: producer.appData,
     });
+
+    callback({ id: producer.id });
   }
 
   async onCreateConsumer(

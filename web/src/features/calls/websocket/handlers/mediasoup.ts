@@ -117,8 +117,6 @@ export function useMediasoupHandlers() {
 
         removeConsumer(consumer.id);
       }
-
-      console.log(consumer, "consumer on consumer closed in frontend");
     },
     [consumers, removeConsumer]
   );

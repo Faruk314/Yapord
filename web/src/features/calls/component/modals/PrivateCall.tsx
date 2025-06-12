@@ -20,9 +20,12 @@ export default function PrivateCall({ userInfo, recipientInfo }: Props) {
   const [openFullScreen, setOpenFullScreen] = useState(false);
   const { leaveCall } = useCallManager();
   const consumers = useMediasoupStore((state) => state.consumers);
-  const localStream = useMediasoupStore((state) => state.localStream);
+  const localStreams = useMediasoupStore((state) => state.localStreams);
+  const producers = useMediasoupStore((state) => state.producers);
 
   console.log(consumers, "consumers");
+
+  console.log(producers, "producers");
 
   function handleFullScreen() {
     setOpenFullScreen((prev) => !prev);
@@ -48,7 +51,12 @@ export default function PrivateCall({ userInfo, recipientInfo }: Props) {
       </div>
 
       <div className="flex space-x-4 items-center justify-center pb-4 pt-10">
-        <CallAvatar LocalConsumer={{ user: userInfo, localStream }} />
+        {Array.from(localStreams.entries()).map(([type, localStream]) => (
+          <CallAvatar
+            key={type}
+            localConsumer={{ user: userInfo, localStream }}
+          />
+        ))}
 
         {Array.from(consumers.entries()).map(([id, consumer]) => (
           <CallAvatar key={id} consumer={consumer} />

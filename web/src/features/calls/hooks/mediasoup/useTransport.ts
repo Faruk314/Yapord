@@ -14,7 +14,8 @@ export default function useMediasoupTransport() {
 
   const setSendTransport = useMediasoupStore((store) => store.setSendTransport);
   const setRecvTransport = useMediasoupStore((store) => store.setRecvTransport);
-  const setLocalStream = useMediasoupStore((store) => store.setLocalStream);
+  const addLocalStream = useMediasoupStore((store) => store.addLocalStream);
+  const addProducer = useMediasoupStore((store) => store.addProducer);
 
   async function setupSendTransport(
     sendTransportData: Itransport,
@@ -56,9 +57,6 @@ export default function useMediasoupTransport() {
           },
 
           (producerInfo) => {
-            console.log(
-              `Frontend: Producer created with ID: ${producerInfo.id}`
-            );
             callback(producerInfo);
           },
           (error) => {
@@ -71,17 +69,18 @@ export default function useMediasoupTransport() {
 
     const { stream, videoTrack } = await getUserMediaStream();
 
-    setLocalStream(stream);
+    addLocalStream("webcam", stream);
 
-    await clientSendTransport.produce({
+    const newProducer = await clientSendTransport.produce({
       track: videoTrack,
-
       encodings: [
-        { rid: "r0", maxBitrate: 100000, scaleResolutionDownBy: 4 },
-        { rid: "r1", maxBitrate: 300000, scaleResolutionDownBy: 2 },
-        { rid: "r2", maxBitrate: 900000, scaleResolutionDownBy: 1 },
+        { rid: "r0", maxBitrate: 100_000, scaleResolutionDownBy: 4 },
+        { rid: "r1", maxBitrate: 300_000, scaleResolutionDownBy: 2 },
+        { rid: "r2", maxBitrate: 900_000, scaleResolutionDownBy: 1 },
       ],
     });
+
+    addProducer("webcam", newProducer);
   }
 
   function setupRecvTransport(recvTransportData: Itransport) {
