@@ -3,31 +3,34 @@
 import { useChatCallStore } from "@/features/chats/store /ChatCalls";
 import { useMediasoupStore } from "../../store/mediasoup";
 import { useCallEmiters } from "../../websocket/emiters/call";
+import { useMediasoupEmiters } from "../../websocket/emiters/mediasoup";
+import useProducer from "./useProducer";
 
 export default function useCallManager() {
-  const consumers = useMediasoupStore((state) => state.consumers);
   const producers = useMediasoupStore((state) => state.producers);
   const removeProducer = useMediasoupStore((state) => state.removeProducer);
+  const { createVideoProducer } = useProducer();
+
+  const consumers = useMediasoupStore((state) => state.consumers);
   const removeConsumer = useMediasoupStore((state) => state.removeConsumer);
+
   const setSendTransport = useMediasoupStore((state) => state.setSendTransport);
   const setRecvTransport = useMediasoupStore((state) => state.setRecvTransport);
+  const clientSendTransport = useMediasoupStore((state) => state.sendTransport);
+
   const localStreams = useMediasoupStore((state) => state.localStreams);
+  const getLocalStream = useMediasoupStore((state) => state.getLocalStream);
   const removeLocalStream = useMediasoupStore(
     (state) => state.removeLocalStream
   );
+
   const setDevice = useMediasoupStore((state) => state.setDevice);
-  const closeChatCallModal = useChatCallStore((state) => state.closeCallModal);
   const getProducer = useMediasoupStore((state) => state.getProducer);
 
+  const closeChatCallModal = useChatCallStore((state) => state.closeCallModal);
+
+  const { emitRemoveProducer } = useMediasoupEmiters();
   const { emitCallLeave } = useCallEmiters();
-
-  function closeConsumer(consumerId: string) {
-    const consumerToRemove = consumers.get(consumerId);
-
-    consumerToRemove?.close();
-
-    removeConsumer(consumerId);
-  }
 
   function leaveCall() {
     emitCallLeave();
@@ -44,7 +47,7 @@ export default function useCallManager() {
 
     consumers.forEach((consumer) => {
       consumer.close();
-      closeConsumer(consumer.id);
+      removeConsumer(consumer.id);
     });
 
     setSendTransport(null);
@@ -54,10 +57,27 @@ export default function useCallManager() {
     closeChatCallModal();
   }
 
-  function toogleCamera() {
+  async function toogleCamera() {
     const producer = getProducer("webcam");
 
-    producer?.pause();
+    if (producer) {
+      emitRemoveProducer({ producerId: producer.id }, () => {
+        producer?.close();
+
+        const cameraStream = getLocalStream("webcam");
+
+        cameraStream?.getVideoTracks().forEach((track) => track.stop());
+
+        removeLocalStream("webcam");
+
+        removeProducer("webcam");
+      });
+    } else {
+      if (!clientSendTransport)
+        throw new Error("Client send transport does not exist");
+
+      await createVideoProducer(clientSendTransport);
+    }
   }
 
   return { leaveCall, toogleCamera };

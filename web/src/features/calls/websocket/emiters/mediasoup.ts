@@ -26,13 +26,8 @@ export function useMediasoupEmiters() {
       data,
       (response: { error?: string }) => {
         if (response && response.error) {
-          console.error(
-            "Backend error connecting send transport:",
-            response.error
-          );
           onError(new Error(response.error));
         } else {
-          console.log("Backend confirmed send transport connection.");
           onSuccess();
         }
       }
@@ -52,13 +47,8 @@ export function useMediasoupEmiters() {
       data,
       (response: { error?: string }) => {
         if (response && response.error) {
-          console.error(
-            "Backend error connecting recv transport:",
-            response.error
-          );
           onError(new Error(response.error));
         } else {
-          console.log("Backend confirmed recv transport connection.");
           onSuccess();
         }
       }
@@ -81,22 +71,31 @@ export function useMediasoupEmiters() {
       data,
       (response: { id?: string; error?: string }) => {
         if (response && response.error) {
-          console.error("Backend error creating producer:", response.error);
           onError(new Error(response.error));
         } else if (response && response.id) {
-          console.log(
-            "Backend confirmed producer created with ID:",
-            response.id
-          );
           onSuccess({ id: response.id });
         } else {
-          console.error(
-            "Backend sent an unexpected response for createProducer:",
-            response
-          );
           onError(
             new Error("Unexpected response from backend for producer creation")
           );
+        }
+      }
+    );
+  }
+
+  function emitRemoveProducer(
+    data: { producerId: string },
+    onSuccess: () => void
+  ) {
+    socket?.emit(
+      "removeProducer",
+      data,
+      (response: { error: boolean; message?: string }) => {
+        if (response.error) {
+          throw new Error(response.message);
+        } else {
+          console.log("hej from success");
+          onSuccess();
         }
       }
     );
@@ -116,17 +115,35 @@ export function useMediasoupEmiters() {
       data,
       (response: Consumer & { error?: string }) => {
         if (response && response.error) {
-          console.error("Backend error creating consumer:", response.error);
-
           throw new Error(response.error);
         } else if (!response) {
-          console.error("Backend returned empty response for createConsumer.");
-
           throw new Error("Empty response from backend");
         } else {
-          console.log("Backend confirmed consumer created:", response.id);
-
           onSuccess(response);
+        }
+      }
+    );
+  }
+
+  function emitProducerPause(data: { producerId: string }) {
+    socket?.emit(
+      "producerPause",
+      data,
+      (response: { error: boolean; message?: string }) => {
+        if (response.error) {
+          throw new Error(response.message);
+        }
+      }
+    );
+  }
+
+  function emitProducerResume(data: { producerId: string }) {
+    socket?.emit(
+      "producerResume",
+      data,
+      (response: { error: boolean; message?: string }) => {
+        if (response.error) {
+          throw new Error(response.message);
         }
       }
     );
@@ -138,6 +155,9 @@ export function useMediasoupEmiters() {
     emitConnectSendTransport,
     emitConnectRecvTransport,
     emitCreateProducer,
+    emitRemoveProducer,
     emitCreateConsumer,
+    emitProducerPause,
+    emitProducerResume,
   };
 }
