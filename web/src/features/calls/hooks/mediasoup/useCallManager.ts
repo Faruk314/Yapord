@@ -29,7 +29,7 @@ export default function useCallManager() {
 
   const closeChatCallModal = useChatCallStore((state) => state.closeCallModal);
 
-  const { emitRemoveProducer } = useMediasoupEmiters();
+  const { emitCloseProducer } = useMediasoupEmiters();
   const { emitCallLeave } = useCallEmiters();
 
   function leaveCall() {
@@ -61,8 +61,10 @@ export default function useCallManager() {
     const producer = getProducer("webcam");
 
     if (producer) {
-      emitRemoveProducer({ producerId: producer.id }, () => {
+      emitCloseProducer({ producerId: producer.id }, () => {
         producer?.close();
+
+        console.log("hej");
 
         const cameraStream = getLocalStream("webcam");
 
@@ -75,6 +77,8 @@ export default function useCallManager() {
     } else {
       if (!clientSendTransport)
         throw new Error("Client send transport does not exist");
+
+      console.log("hej");
 
       await createVideoProducer(clientSendTransport);
     }

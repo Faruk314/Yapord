@@ -35,6 +35,12 @@ class MediasoupListeners {
     this.socket.on("createProducer", this.onCreateProducer.bind(this));
 
     this.socket.on("createConsumer", this.onCreateConsumer.bind(this));
+
+    this.socket.on("producerPause", this.onProducerPause.bind(this));
+
+    this.socket.on("producerResume", this.onProducerResume.bind(this));
+
+    this.socket.on("producerClose", this.onProducerClose.bind(this));
   }
 
   async onGetRtpCapabilities({ channelId }: { channelId: string }) {
@@ -251,6 +257,99 @@ class MediasoupListeners {
     };
 
     callback(response);
+  }
+
+  async onProducerPause(
+    data: { producerId: string },
+    callback: (response: { error: boolean; message?: string }) => void
+  ) {
+    const { producerId } = data;
+    const peer = getPeer(this.socket.id);
+
+    if (!peer) {
+      return callback({ error: true, message: "Peer not found" });
+    }
+
+    const producer = peer.producers.get(producerId);
+
+    if (!producer) {
+      return callback({ error: true, message: "Producer not found" });
+    }
+
+    try {
+      await producer.pause();
+
+      this.io.to(peer.channelId).emit("producerPaused", {
+        producerId: producer.id,
+        userId: peer.userId,
+      });
+      callback({ error: false, message: "Producer created successfully" });
+    } catch (error) {
+      callback({ error: true, message: "Failed to pause producer" });
+    }
+  }
+
+  async onProducerResume(
+    data: { producerId: string },
+    callback: (response: { error: boolean; message?: string }) => void
+  ) {
+    const { producerId } = data;
+    const peer = getPeer(this.socket.id);
+
+    if (!peer) {
+      return callback({ error: true, message: "Peer not found" });
+    }
+
+    const producer = peer.producers.get(producerId);
+
+    if (!producer) {
+      return callback({ error: true, message: "Producer not found" });
+    }
+
+    try {
+      await producer.resume();
+
+      this.io.to(peer.channelId).emit("producerResumed", {
+        producerId: producer.id,
+        userId: peer.userId,
+      });
+      callback({ error: false, message: "Producer resumed successfully" });
+    } catch (error) {
+      callback({ error: true, message: "Failed to resume producer" });
+    }
+  }
+
+  async onProducerClose(
+    data: { producerId: string },
+    callback: (response: { error: boolean; message?: string }) => void
+  ) {
+    const { producerId } = data;
+    const peer = getPeer(this.socket.id);
+
+    if (!peer) {
+      return callback({ error: true, message: "Peer not found" });
+    }
+
+    const producer = peer.producers.get(producerId);
+
+    if (!producer) {
+      return callback({ error: true, message: "Producer not found" });
+    }
+
+    try {
+      producer.close();
+
+      peer.producers.delete(producerId);
+
+      this.io.to(peer.channelId).emit("producerClosed", {
+        producerId,
+        userId: peer.userId,
+      });
+
+      callback({ error: false, message: "Producer closed successfully" });
+    } catch (error) {
+      callback({ error: true, message: "Failed to close producer" });
+    }
   }
 }
 

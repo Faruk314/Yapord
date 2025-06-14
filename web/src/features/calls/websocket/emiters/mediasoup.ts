@@ -83,12 +83,12 @@ export function useMediasoupEmiters() {
     );
   }
 
-  function emitRemoveProducer(
+  function emitCloseProducer(
     data: { producerId: string },
     onSuccess: () => void
   ) {
     socket?.emit(
-      "removeProducer",
+      "producerClose",
       data,
       (response: { error: boolean; message?: string }) => {
         if (response.error) {
@@ -155,7 +155,7 @@ export function useMediasoupEmiters() {
     emitConnectSendTransport,
     emitConnectRecvTransport,
     emitCreateProducer,
-    emitRemoveProducer,
+    emitCloseProducer,
     emitCreateConsumer,
     emitProducerPause,
     emitProducerResume,
