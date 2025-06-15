@@ -1,5 +1,9 @@
 import { Transport } from "mediasoup-client/types";
-import { getUserMediaStream } from "../../utils/mediasoup";
+import {
+  getUserAudioStream,
+  getUserDisplayStream,
+  getUserMediaStream,
+} from "../../utils/mediasoup";
 import { useMediasoupStore } from "../../store/mediasoup";
 
 export default function useProducer() {
@@ -13,6 +17,7 @@ export default function useProducer() {
 
     const newProducer = await clientSendTransport.produce({
       track: videoTrack,
+      appData: { streamType: "video" },
       encodings: [
         { rid: "r0", maxBitrate: 100_000, scaleResolutionDownBy: 4 },
         { rid: "r1", maxBitrate: 300_000, scaleResolutionDownBy: 2 },
@@ -23,7 +28,31 @@ export default function useProducer() {
     addProducer("webcam", newProducer);
   }
 
-  function createAudioProducer() {}
+  async function createAudioProducer(clientSendTransport: Transport) {
+    const { stream, audioTrack } = await getUserAudioStream();
 
-  return { createVideoProducer, createAudioProducer };
+    addLocalStream("mic", stream);
+
+    const newProducer = await clientSendTransport.produce({
+      track: audioTrack,
+      appData: { streamType: "audio" },
+    });
+
+    addProducer("mic", newProducer);
+  }
+
+  async function createDisplayProducer(clientSendTransport: Transport) {
+    const { stream, screenTrack } = await getUserDisplayStream();
+
+    addLocalStream("screen", stream);
+
+    const newProducer = await clientSendTransport.produce({
+      track: screenTrack,
+      appData: { streamType: "screenShare" },
+    });
+
+    addProducer("screen", newProducer);
+  }
+
+  return { createVideoProducer, createAudioProducer, createDisplayProducer };
 }

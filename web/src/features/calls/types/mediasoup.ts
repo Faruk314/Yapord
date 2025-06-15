@@ -20,7 +20,7 @@ interface ProducerAppData extends types.AppData {
 }
 
 interface Iconsumer extends types.Consumer {
-  appData: { user: Iuser };
+  appData: { user: Iuser; streamType: "screenShare" | "video" | "audio" };
 }
 
 export type { Itransport, ProducerAppData, Iconsumer };

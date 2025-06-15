@@ -8,6 +8,7 @@ import PrivateCall from "@/features/calls/component/modals/PrivateCall";
 import { Phone, Video } from "lucide-react";
 import { useChatCallStore } from "../store /ChatCalls";
 import { useCallEmiters } from "@/features/calls/websocket/emiters/call";
+import { TCall } from "@/features/calls/types/call";
 
 interface Props {
   chatId: string;
@@ -25,10 +26,14 @@ export default function PrivateChatHeader({
   const callModalOpen = useChatCallStore((state) => state.callModalOpen);
   const openChatCallModal = useChatCallStore((state) => state.openCallModal);
 
-  function handleCall() {
+  function handleCall(type: TCall) {
     if (!socket) return;
 
-    emitUserCall({ channelId: chatId, recipientId: recipientInfo.id });
+    emitUserCall({
+      channelId: chatId,
+      recipientId: recipientInfo.id,
+      callType: type,
+    });
 
     openChatCallModal();
   }
@@ -45,9 +50,13 @@ export default function PrivateChatHeader({
       </div>
 
       <div className="flex items-center space-x-4">
-        <IconBtn className="h-9 w-9" icon={<Phone />} />
         <IconBtn
-          onClick={handleCall}
+          onClick={() => handleCall("audio")}
+          className="h-9 w-9"
+          icon={<Phone />}
+        />
+        <IconBtn
+          onClick={() => handleCall("video")}
           className="h-9 w-9 cursor-pointer"
           icon={<Video />}
         />

@@ -9,7 +9,7 @@ import useProducer from "./useProducer";
 export default function useCallManager() {
   const producers = useMediasoupStore((state) => state.producers);
   const removeProducer = useMediasoupStore((state) => state.removeProducer);
-  const { createVideoProducer } = useProducer();
+  const { createVideoProducer, createDisplayProducer } = useProducer();
 
   const consumers = useMediasoupStore((state) => state.consumers);
   const removeConsumer = useMediasoupStore((state) => state.removeConsumer);
@@ -64,8 +64,6 @@ export default function useCallManager() {
       emitCloseProducer({ producerId: producer.id }, () => {
         producer?.close();
 
-        console.log("hej");
-
         const cameraStream = getLocalStream("webcam");
 
         cameraStream?.getVideoTracks().forEach((track) => track.stop());
@@ -78,11 +76,32 @@ export default function useCallManager() {
       if (!clientSendTransport)
         throw new Error("Client send transport does not exist");
 
-      console.log("hej");
-
       await createVideoProducer(clientSendTransport);
     }
   }
 
-  return { leaveCall, toogleCamera };
+  async function toogleScreenShare() {
+    const producer = getProducer("screen");
+
+    if (producer) {
+      emitCloseProducer({ producerId: producer.id }, () => {
+        producer.close();
+
+        const screenStream = getLocalStream("screen");
+
+        screenStream?.getVideoTracks().forEach((track) => track.stop());
+
+        removeLocalStream("screen");
+
+        removeProducer("screen");
+      });
+    } else {
+      if (!clientSendTransport)
+        throw new Error("Client send transport does not exist");
+
+      await createDisplayProducer(clientSendTransport);
+    }
+  }
+
+  return { leaveCall, toogleCamera, toogleScreenShare };
 }

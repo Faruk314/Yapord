@@ -1,11 +1,16 @@
 "use client";
 
 import { useSocket } from "@/context/socketContext";
+import { TCall } from "../../types/call";
 
 export function useCallEmiters() {
   const { socket } = useSocket();
 
-  function emitUserCall(data: { channelId: string; recipientId: string }) {
+  function emitUserCall(data: {
+    channelId: string;
+    recipientId: string;
+    callType: TCall;
+  }) {
     socket?.emit("callUser", data);
   }
 

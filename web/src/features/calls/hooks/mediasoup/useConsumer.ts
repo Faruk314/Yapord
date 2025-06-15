@@ -26,7 +26,10 @@ export default function useMediasoupConsumer() {
         producerId: consumerInfo.producerId,
         kind: consumerInfo.kind,
         rtpParameters: consumerInfo.rtpParameters,
-        appData: consumerInfo.appData as { user: Iuser },
+        appData: consumerInfo.appData as {
+          user: Iuser;
+          streamType: "screenShare" | "video" | "audio";
+        },
       });
 
       if (!clientRecvTransport || !device) {

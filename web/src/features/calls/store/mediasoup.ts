@@ -20,6 +20,7 @@ type MediasoupState = {
   resetMediasoupState: () => void;
 
   addConsumer: (id: string, consumer: Iconsumer) => void;
+  getConsumerByUserId: (userId: string) => Iconsumer | undefined;
   removeConsumer: (id: string) => void;
   clearConsumers: () => void;
 
@@ -59,6 +60,18 @@ export const useMediasoupStore = create<MediasoupState>((set, get) => ({
       newConsumersMap.set(id, consumer);
       return { consumers: newConsumersMap };
     }),
+
+  getConsumerByUserId: (userId) => {
+    for (const consumer of get().consumers.values()) {
+      if (
+        consumer.appData?.user?.id === userId &&
+        consumer.appData?.streamType === "video"
+      ) {
+        return consumer;
+      }
+    }
+    return undefined;
+  },
 
   removeConsumer: (id) =>
     set((state) => {

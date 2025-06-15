@@ -6,6 +6,7 @@ import { useChatCallStore } from "@/features/chats/store /ChatCalls";
 import { useMediasoupEmiters } from "../emiters/mediasoup";
 import { useCallback } from "react";
 import useCallManager from "../../hooks/mediasoup/useCallManager";
+import { TCall } from "../../types/call";
 
 export function useCallHandlers() {
   const { emitGetRtpCapabilities } = useMediasoupEmiters();
@@ -17,7 +18,7 @@ export function useCallHandlers() {
   );
 
   const onIncomingCall = useCallback(
-    (data: { channelId: string; senderInfo: Iuser }) => {
+    (data: { channelId: string; senderInfo: Iuser; callType: TCall }) => {
       setIncomingCallInfo(data);
       openCallModal();
     },

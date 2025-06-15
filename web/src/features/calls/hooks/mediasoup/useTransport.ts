@@ -1,7 +1,8 @@
+import { useCallStore } from "../../store/call";
 import { useMediasoupStore } from "../../store/mediasoup";
 import { Itransport } from "../../types/mediasoup";
-import { getUserMediaStream } from "../../utils/mediasoup";
 import { useMediasoupEmiters } from "../../websocket/emiters/mediasoup";
+import useProducer from "./useProducer";
 
 export default function useMediasoupTransport() {
   const device = useMediasoupStore((store) => store.device);
@@ -14,8 +15,10 @@ export default function useMediasoupTransport() {
 
   const setSendTransport = useMediasoupStore((store) => store.setSendTransport);
   const setRecvTransport = useMediasoupStore((store) => store.setRecvTransport);
-  const addLocalStream = useMediasoupStore((store) => store.addLocalStream);
-  const addProducer = useMediasoupStore((store) => store.addProducer);
+
+  const { createAudioProducer, createVideoProducer } = useProducer();
+
+  const callInfo = useCallStore((store) => store.incomingCallInfo);
 
   async function setupSendTransport(
     sendTransportData: Itransport,
@@ -67,20 +70,13 @@ export default function useMediasoupTransport() {
       }
     );
 
-    const { stream, videoTrack } = await getUserMediaStream();
+    if (callInfo?.callType === "audio") {
+      return await createAudioProducer(clientSendTransport);
+    }
 
-    addLocalStream("webcam", stream);
-
-    const newProducer = await clientSendTransport.produce({
-      track: videoTrack,
-      encodings: [
-        { rid: "r0", maxBitrate: 100_000, scaleResolutionDownBy: 4 },
-        { rid: "r1", maxBitrate: 300_000, scaleResolutionDownBy: 2 },
-        { rid: "r2", maxBitrate: 900_000, scaleResolutionDownBy: 1 },
-      ],
-    });
-
-    addProducer("webcam", newProducer);
+    if (callInfo?.callType === "video") {
+      return await createVideoProducer(clientSendTransport);
+    }
   }
 
   function setupRecvTransport(recvTransportData: Itransport) {

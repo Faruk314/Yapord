@@ -13,7 +13,7 @@ import { useChatCallStore } from "@/features/chats/store /ChatCalls";
 import { useCallEmiters } from "../../websocket/emiters/call";
 
 export default function IncomingCall() {
-  const { channelId, senderInfo } = useCallStore(
+  const { channelId, senderInfo, callType } = useCallStore(
     (state) => state.incomingCallInfo!
   );
 
@@ -55,7 +55,7 @@ export default function IncomingCall() {
 
         <DialogHeader>
           <DialogTitle className="flex space-x-1">
-            <span>Incoming call from</span>
+            <span>Incoming {callType} call from</span>
             <span className="font-semibold">{senderInfo.name}</span>
           </DialogTitle>
         </DialogHeader>

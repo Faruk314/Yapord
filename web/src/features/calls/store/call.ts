@@ -1,12 +1,19 @@
 import { Iuser } from "@/features/auth/types/user";
 import { create } from "zustand";
+import { TCall } from "../types/call";
 
 type CallState = {
   callModalOpen: boolean;
-  incomingCallInfo: { channelId: string; senderInfo: Iuser } | undefined;
+  incomingCallInfo:
+    | { channelId: string; senderInfo: Iuser; callType: TCall }
+    | undefined;
   openCallModal: () => void;
   closeCallModal: () => void;
-  setIncomingCallInfo: (data: { channelId: string; senderInfo: Iuser }) => void;
+  setIncomingCallInfo: (data: {
+    channelId: string;
+    senderInfo: Iuser;
+    callType: TCall;
+  }) => void;
 };
 
 export const useCallStore = create<CallState>((set) => ({

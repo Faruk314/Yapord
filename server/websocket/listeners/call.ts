@@ -32,9 +32,11 @@ class CallListeners {
   async onCallUser({
     channelId,
     recipientId,
+    callType,
   }: {
     channelId: string;
     recipientId: string;
+    callType: "video" | "audio";
   }) {
     const recipient = await getUser(recipientId);
 
@@ -46,9 +48,11 @@ class CallListeners {
 
     createPeer(this.socket.id, this.socket.user.id, channelId);
 
-    this.socket
-      .to(recipient?.socketId)
-      .emit("incomingCall", { channelId, senderInfo: this.socket.user });
+    this.socket.to(recipient?.socketId).emit("incomingCall", {
+      channelId,
+      senderInfo: this.socket.user,
+      callType,
+    });
   }
 
   async onCallDecline({
